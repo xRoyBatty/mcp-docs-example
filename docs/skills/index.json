@@ -1,0 +1,34 @@
+{
+    "skills": [
+        {
+            "id": "reading",
+            "name": "Reading",
+            "description": "Reading comprehension exercises"
+        },
+        {
+            "id": "writing",
+            "name": "Writing",
+            "description": "Writing practice activities"
+        },
+        {
+            "id": "listening",
+            "name": "Listening",
+            "description": "Audio-based exercises"
+        },
+        {
+            "id": "speaking",
+            "name": "Speaking",
+            "description": "Speaking practice activities"
+        },
+        {
+            "id": "grammar",
+            "name": "Grammar",
+            "description": "Grammar exercises and practice"
+        },
+        {
+            "id": "vocabulary",
+            "name": "Vocabulary",
+            "description": "Vocabulary building activities"
+        }
+    ]
+}

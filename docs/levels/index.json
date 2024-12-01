@@ -1,0 +1,29 @@
+{
+    "levels": [
+        {
+            "id": "a1",
+            "name": "A1 Beginner",
+            "description": "Basic English communication"
+        },
+        {
+            "id": "a2",
+            "name": "A2 Elementary",
+            "description": "Elementary English skills"
+        },
+        {
+            "id": "b1",
+            "name": "B1 Intermediate",
+            "description": "Independent English use"
+        },
+        {
+            "id": "b2",
+            "name": "B2 Upper Intermediate",
+            "description": "Fluent English in most situations"
+        },
+        {
+            "id": "c1",
+            "name": "C1 Advanced",
+            "description": "Advanced English mastery"
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive ESL Worksheets</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <h1>Interactive ESL Worksheets</h1>
+            <nav>
+                <a href="#" class="active">Home</a>
+                <a href="worksheets/">Worksheets</a>
+                <a href="levels/">Levels</a>
+                <a href="skills/">Skills</a>
+            </nav>
+        </header>
+        <main>
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search worksheets...">
+                <button id="search-btn">Search</button>
+            </div>
+            <div class="featured-worksheets">
+                <h2>Featured Worksheets</h2>
+                <div class="worksheet-grid" id="featured-grid">
+                    <!-- Worksheets will be loaded dynamically -->
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
