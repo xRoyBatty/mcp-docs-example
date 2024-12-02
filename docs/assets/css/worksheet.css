@@ -1,0 +1,168 @@
+/* Worksheet specific styles */
+.worksheet-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.worksheet-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.worksheet-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    color: #666;
+    margin-top: 1rem;
+}
+
+/* Exercise Components */
+.exercise {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+}
+
+/* Fill in the blanks */
+.fill-blank {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    margin: 0 0.5rem;
+    padding: 0.25rem;
+    width: 120px;
+    transition: border-color 0.3s;
+}
+
+.fill-blank:focus {
+    outline: none;
+    border-bottom-color: var(--primary-color);
+}
+
+.fill-blank.correct {
+    border-bottom-color: #2ecc71;
+}
+
+.fill-blank.incorrect {
+    border-bottom-color: #e74c3c;
+}
+
+/* Multiple Choice */
+.multiple-choice-container {
+    margin: 1rem 0;
+}
+
+.multiple-choice-container label {
+    display: block;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.multiple-choice-container label:hover {
+    background-color: #f8f9fa;
+}
+
+/* Matching Exercise */
+.matching-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.matching-item {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: move;
+    background: white;
+}
+
+.matching-item.matched {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+/* Feedback */
+.feedback {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 1rem;
+    border-radius: 4px;
+    color: white;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.feedback.correct {
+    background-color: #2ecc71;
+}
+
+.feedback.incorrect {
+    background-color: #e74c3c;
+}
+
+/* Audio controls */
+.play-audio {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.play-audio:hover {
+    background-color: #27ae60;
+}
+
+/* Hints */
+.hint {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 4px;
+    color: #856404;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Print styles */
+@media print {
+    .worksheet-container {
+        box-shadow: none;
+        margin: 0;
+        padding: 1rem;
+    }
+
+    .play-audio,
+    #check-answers,
+    #show-hints,
+    #reset-exercise {
+        display: none;
+    }
+}
