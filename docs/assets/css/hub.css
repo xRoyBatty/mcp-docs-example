@@ -1,0 +1,134 @@
+/* Hub-specific styles */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header styles */
+.site-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.site-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Filter styles */
+.level-filter,
+.skill-filter {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.level-filter button,
+.skill-filter button {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--color-primary);
+    background: transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.level-filter button:hover,
+.skill-filter button:hover,
+.level-filter button.active,
+.skill-filter button.active {
+    background: var(--color-primary);
+    color: white;
+}
+
+/* Search styles */
+.search {
+    margin: 2rem 0;
+}
+
+.search input {
+    width: 100%;
+    max-width: 500px;
+    padding: 0.75rem;
+    border: 2px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.search input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* Worksheet grid */
+.worksheet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Worksheet card */
+.worksheet-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.worksheet-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.worksheet-card h2 {
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+}
+
+.worksheet-card .meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.worksheet-card .description {
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.worksheet-card .task-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.worksheet-card .task-type {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .site-header h1 {
+        font-size: 2rem;
+    }
+
+    .worksheet-grid {
+        grid-template-columns: 1fr;
+    }
+}
