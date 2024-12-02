@@ -1,33 +1,115 @@
 /* Multiple choice task styles */
 
-.multi-choice .question {
-    margin-bottom: var(--spacing-lg);
+.multi-choice .questions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
+/* Question styling */
+.multi-choice .question {
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.multi-choice .question-text {
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+/* Options container */
 .multi-choice .options {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: 0.75rem;
 }
 
+/* Option styling */
 .multi-choice .option {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm);
-    border: 1px solid var(--color-border);
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--color-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    background: white;
+}
+
+/* Radio input styling */
+.multi-choice input[type="radio"] {
+    margin-right: 1rem;
+    width: 1.25rem;
+    height: 1.25rem;
     cursor: pointer;
 }
 
+/* Option prefix */
+.multi-choice .option-prefix {
+    font-weight: 500;
+    color: var(--color-text-light);
+    margin-right: 0.5rem;
+}
+
+/* Option states */
 .multi-choice .option:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    border-color: var(--color-primary);
+    background-color: var(--color-background);
 }
 
-/* States */
-.multi-choice .option[data-state="correct"] {
+.multi-choice .option.selected {
+    border-color: var(--color-primary);
+    background-color: rgba(46, 204, 113, 0.05);
+}
+
+.multi-choice .option.correct {
     border-color: var(--color-success);
+    background-color: rgba(46, 204, 113, 0.1);
 }
 
-.multi-choice .option[data-state="incorrect"] {
+.multi-choice .option.incorrect {
     border-color: var(--color-error);
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.multi-choice .option.dimmed {
+    opacity: 0.7;
+}
+
+/* Animation for state changes */
+.multi-choice .option {
+    transform-origin: center left;
+    animation: optionAppear 0.3s ease;
+}
+
+@keyframes optionAppear {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .multi-choice .question {
+        padding: 1rem;
+    }
+
+    .multi-choice .option {
+        padding: 0.75rem;
+    }
+
+    .multi-choice input[type="radio"] {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.75rem;
+    }
 }
