@@ -6,8 +6,28 @@
     <title>Worksheet Title | ESL Worksheets</title>
     <link rel="stylesheet" href="../../assets/css/base.css">
     <link rel="stylesheet" href="../../assets/css/layout.css">
+    <link rel="stylesheet" href="../../assets/css/components/nav.css">
 </head>
 <body>
+    <nav class="worksheet-nav">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Back to Worksheets
+            </a>
+            <div class="nav-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <span class="progress-text">0% Complete</span>
+            </div>
+            <div class="nav-level">Level: B1</div>
+        </div>
+    </nav>
+
     <div class="worksheet">
         <header class="worksheet-header">
             <h1>Sample Worksheet Title</h1>
@@ -20,7 +40,7 @@
 
         <main class="worksheet-content">
             <section class="instructions">
-                <h2>Instructions</h2>
+                <h2>1. Instructions</h2>
                 <div class="instructions-text" data-audio="instructions">
                     Example instructions for this worksheet. Explain what students need to do.
                 </div>
@@ -29,12 +49,12 @@
 
             <!-- Example Multiple Choice Task -->
             <section class="task multi-choice" data-task-type="multiChoice">
-                <h2>Task 1: Multiple Choice Example</h2>
+                <h2>2. Multiple Choice</h2>
                 <p class="task-instructions">Choose the correct answer for each question.</p>
 
                 <div class="questions-container">
                     <div class="question" data-index="1">
-                        <p class="question-text">Sample question 1?</p>
+                        <p class="question-text">1. Sample multiple choice question?</p>
                         <div class="options">
                             <label class="option">
                                 <input type="radio" name="q1" value="1">
@@ -51,25 +71,27 @@
 
             <!-- Example Fill in the Blanks Task -->
             <section class="task fill-blanks" data-task-type="fillBlanks">
-                <h2>Task 2: Fill in the Blanks Example</h2>
+                <h2>3. Fill in the Blanks</h2>
                 <p class="task-instructions">Complete the sentences with the correct words.</p>
 
                 <div class="task-content">
-                    <p>The sun <input type="text" class="blank" data-correct="rises" data-index="1"> in the east.</p>
+                    <p>1. The sun <input type="text" class="blank" data-correct="rises" data-index="1"> in the east.</p>
                 </div>
             </section>
 
             <!-- Example Matching Task -->
             <section class="task matching" data-task-type="matching">
-                <h2>Task 3: Matching Example</h2>
-                <p class="task-instructions">Match the items from the left with their correct pairs on the right.</p>
+                <h2>4. Matching Exercise</h2>
+                <p class="task-instructions">Click an item on the left, then click its matching pair on the right.</p>
 
                 <div class="matching-container">
                     <div class="matching-prompts">
                         <div class="matching-item" data-index="1" data-pair="a">First item</div>
+                        <div class="matching-item" data-index="2" data-pair="b">Second item</div>
                     </div>
                     <div class="matching-responses">
-                        <div class="matching-item" data-index="2" data-pair="a">Matching item</div>
+                        <div class="matching-item" data-index="3" data-pair="b">Matches second</div>
+                        <div class="matching-item" data-index="4" data-pair="a">Matches first</div>
                     </div>
                 </div>
             </section>
