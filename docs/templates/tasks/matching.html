@@ -1,0 +1,29 @@
+<section class="task matching" data-task-type="matching">
+    <h2>{TASK_TITLE}</h2>
+    
+    <!-- Optional task instructions -->
+    <p class="task-instructions">{TASK_INSTRUCTIONS}</p>
+    
+    <!-- Content container -->
+    <div class="matching-container">
+        <!-- First column for prompts -->
+        <div class="matching-prompts">
+            {PROMPTS}
+        </div>
+        
+        <!-- Second column for responses -->
+        <div class="matching-responses">
+            {RESPONSES}
+        </div>
+    </div>
+    
+    <!-- Templates -->
+    <template id="matching-item-template">
+        <div class="matching-item" 
+             draggable="true"
+             data-index="{INDEX}"
+             data-pair="{PAIR_ID}">
+            {CONTENT}
+        </div>
+    </template>
+</section>

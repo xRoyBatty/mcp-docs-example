@@ -1,0 +1,31 @@
+<section class="task multi-choice" data-task-type="multi-choice">
+    <h2>{TASK_TITLE}</h2>
+    
+    <!-- Optional task instructions -->
+    <p class="task-instructions">{TASK_INSTRUCTIONS}</p>
+    
+    <!-- Questions container -->
+    <div class="questions-container">
+        {QUESTIONS}
+    </div>
+    
+    <!-- Templates -->
+    <template id="question-template">
+        <div class="question" data-index="{INDEX}">
+            <p class="question-text">{QUESTION_TEXT}</p>
+            <div class="options">
+                {OPTIONS}
+            </div>
+        </div>
+    </template>
+    
+    <template id="option-template">
+        <label class="option">
+            <input type="radio" 
+                   name="q{QUESTION_INDEX}" 
+                   value="{OPTION_VALUE}"
+                   data-correct="{IS_CORRECT}">
+            <span class="option-text">{OPTION_TEXT}</span>
+        </label>
+    </template>
+</section>

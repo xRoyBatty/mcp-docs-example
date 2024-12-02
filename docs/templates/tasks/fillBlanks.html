@@ -1,0 +1,20 @@
+<section class="task fill-blanks" data-task-type="fill-blanks">
+    <h2>{TASK_TITLE}</h2>
+    
+    <!-- Optional task instructions -->
+    <p class="task-instructions">{TASK_INSTRUCTIONS}</p>
+    
+    <!-- Content container -->
+    <div class="task-content">
+        {CONTENT_WITH_BLANKS}
+    </div>
+    
+    <!-- Template for blanks -->
+    <template id="blank-template">
+        <input type="text" 
+               class="blank" 
+               data-correct="{CORRECT_ANSWER}"
+               data-index="{INDEX}"
+               aria-label="Blank {INDEX}">
+    </template>
+</section>
