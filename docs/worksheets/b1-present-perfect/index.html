@@ -19,15 +19,18 @@
         </header>
 
         <main class="worksheet-content">
+            <!-- Instructions section remains the same -->
             <section class="instructions">
                 <h2>Instructions</h2>
                 <div class="instruction-text" data-audio-text="instructions">
                     In this worksheet, we'll practice using the Present Perfect tense to talk about life experiences. 
-                    Pay attention to the form: have/has + past participle.
+                    Pay attention to the form: have/has + past participle. Remember to use 'has' with he, she, and it,
+                    and 'have' with I, you, we, and they.
                 </div>
                 <button class="play-audio" data-audio="instructions">Listen to Instructions</button>
             </section>
 
+            <!-- Fill in the blanks section remains the same -->
             <section class="exercise">
                 <h2>Exercise 1: Fill in the Blanks</h2>
                 <p>Complete the sentences using the correct form of the Present Perfect.</p>
@@ -44,6 +47,7 @@
                 </div>
             </section>
 
+            <!-- Multiple choice section remains the same -->
             <section class="exercise">
                 <h2>Exercise 2: Multiple Choice</h2>
                 <p>Choose the correct form of the verb.</p>
@@ -83,63 +87,82 @@
                 </div>
             </section>
 
+            <!-- Updated matching section with improved structure -->
             <section class="exercise">
                 <h2>Exercise 3: Matching</h2>
-                <p>Match the beginnings with the correct endings to make true Present Perfect sentences.</p>
+                <p>Match the sentence beginnings with their correct endings by dragging and dropping.</p>
 
                 <div class="matching-container">
-                    <div class="matching-item" id="start1" data-match="end1" draggable="true">
-                        I have never
-                    </div>
-                    <div class="matching-item" data-match="start1">
-                        seen snow before.
-                    </div>
-
-                    <div class="matching-item" id="start2" data-match="end2" draggable="true">
-                        She has just
-                    </div>
-                    <div class="matching-item" data-match="start2">
-                        arrived home.
+                    <!-- Each matching pair is wrapped in a div for better organization -->
+                    <div class="matching-pair">
+                        <div class="matching-item" id="start1" data-match="pair1" draggable="true">
+                            They have just
+                        </div>
+                        <div class="matching-item" data-match="pair1">
+                            moved into a new house.
+                        </div>
                     </div>
 
-                    <div class="matching-item" id="start3" data-match="end3" draggable="true">
-                        They have already
+                    <div class="matching-pair">
+                        <div class="matching-item" id="start2" data-match="pair2" draggable="true">
+                            She has never
+                        </div>
+                        <div class="matching-item" data-match="pair2">
+                            been to Paris before.
+                        </div>
                     </div>
-                    <div class="matching-item" data-match="start3">
-                        done their work.
+
+                    <div class="matching-pair">
+                        <div class="matching-item" id="start3" data-match="pair3" draggable="true">
+                            We have already
+                        </div>
+                        <div class="matching-item" data-match="pair3">
+                            finished our homework.
+                        </div>
+                    </div>
+
+                    <div class="matching-pair">
+                        <div class="matching-item" id="start4" data-match="pair4" draggable="true">
+                            He has recently
+                        </div>
+                        <div class="matching-item" data-match="pair4">
+                            started learning Japanese.
+                        </div>
                     </div>
                 </div>
             </section>
 
+            <!-- Speaking practice section with audio support -->
             <section class="exercise">
                 <h2>Exercise 4: Speaking Practice</h2>
-                <p>Record yourself answering these questions using the Present Perfect.</p>
+                <p>Listen to these questions and record your answers using the Present Perfect.</p>
 
                 <div class="speaking-practice">
                     <div class="question">
-                        <p>1. Have you ever traveled abroad?</p>
-                        <button class="play-audio" data-audio="q1">Listen</button>
+                        <p data-audio-text="q1">1. Have you ever traveled abroad? Where have you been?</p>
+                        <button class="play-audio" data-audio="q1">Listen to Question</button>
                         <button class="record-audio">Record Answer</button>
                     </div>
 
                     <div class="question">
-                        <p>2. What new foods have you tried recently?</p>
-                        <button class="play-audio" data-audio="q2">Listen</button>
+                        <p data-audio-text="q2">2. What new foods have you tried recently?</p>
+                        <button class="play-audio" data-audio="q2">Listen to Question</button>
                         <button class="record-audio">Record Answer</button>
                     </div>
 
                     <div class="question">
-                        <p>3. Have you learned any new skills this year?</p>
-                        <button class="play-audio" data-audio="q3">Listen</button>
+                        <p data-audio-text="q3">3. Have you learned any new skills this year?</p>
+                        <button class="play-audio" data-audio="q3">Listen to Question</button>
                         <button class="record-audio">Record Answer</button>
                     </div>
                 </div>
             </section>
 
+            <!-- Answer section -->
             <section class="answers hidden">
                 <h2>Answer Key</h2>
                 <div class="answer-content">
-                    <h3>Exercise 1:</h3>
+                    <h3>Exercise 1: Fill in the Blanks</h3>
                     <ol>
                         <li>has visited</li>
                         <li>have never eaten</li>
@@ -148,16 +171,19 @@
                         <li>has already checked</li>
                     </ol>
 
-                    <h3>Exercise 2:</h3>
+                    <h3>Exercise 2: Multiple Choice</h3>
                     <ol>
                         <li>has been</li>
                         <li>haven't finished</li>
                     </ol>
 
-                    <h3>Exercise 3:</h3>
-                    <p>I have never → seen snow before</p>
-                    <p>She has just → arrived home</p>
-                    <p>They have already → done their work</p>
+                    <h3>Exercise 3: Matching</h3>
+                    <ul>
+                        <li>They have just → moved into a new house</li>
+                        <li>She has never → been to Paris before</li>
+                        <li>We have already → finished our homework</li>
+                        <li>He has recently → started learning Japanese</li>
+                    </ul>
                 </div>
             </section>
         </main>
