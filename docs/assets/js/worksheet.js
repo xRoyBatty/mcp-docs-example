@@ -12,13 +12,29 @@ class WorksheetManager {
             features: ['instructions', 'feedback', 'examples']
         };
         
-        this.initializeAudio();
+        this.initializeVoices();
         this.initializeInteractions();
     }
     
-    initializeAudio() {
-        this.instructorVoice = document.getElementById('instructor-voice');
-        this.studentVoice = document.getElementById('student-voice');
+    async initializeVoices() {
+        // Wait for speech synthesis voices to be loaded
+        if (window.speechSynthesis.getVoices().length === 0) {
+            await new Promise(resolve => {
+                window.speechSynthesis.addEventListener('voiceschanged', resolve, { once: true });
+            });
+        }
+
+        // Initialize voice objects
+        const voices = window.speechSynthesis.getVoices();
+        this.instructorVoice = voices.find(voice => 
+            voice.name === this.voiceConfig.instructor.primary ||
+            voice.name.includes(this.voiceConfig.instructor.fallback)
+        ) || voices[0];
+
+        this.studentVoice = voices.find(voice => 
+            voice.name === this.voiceConfig.student.primary ||
+            voice.name.includes(this.voiceConfig.student.fallback)
+        ) || voices[0];
         
         // Initialize audio buttons
         document.querySelectorAll('.play-audio').forEach(button => {
@@ -81,22 +97,31 @@ class WorksheetManager {
         });
     }
     
-    async playAudio(type) {
-        const text = document.querySelector(`[data-audio-text="${type}"]`).textContent;
-        const voice = type === 'instructions' ? this.voiceConfig.instructor : this.voiceConfig.student;
-        
-        try {
-            // Here you would integrate with your preferred text-to-speech service
-            // For now, we'll use a placeholder
-            console.log(`Playing audio for ${type} with voice ${voice.primary}`);
-            
-            // Placeholder for audio playback
-            const audioElement = type === 'instructions' ? this.instructorVoice : this.studentVoice;
-            // audioElement.src = await this.getAudioUrl(text, voice);
-            // await audioElement.play();
-        } catch (error) {
-            console.error('Error playing audio:', error);
+    playAudio(type) {
+        // Find the text content from the data-audio-text attribute
+        const textElement = document.querySelector(`[data-audio-text="${type}"]`);
+        if (!textElement) {
+            console.error(`No text element found for audio type: ${type}`);
+            return;
         }
+
+        const text = textElement.textContent.trim();
+        if (!text) {
+            console.error('No text content found to speak');
+            return;
+        }
+
+        // Create and configure speech utterance
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = type === 'instructions' ? this.instructorVoice : this.studentVoice;
+        utterance.rate = 0.9; // Slightly slower for better clarity
+        utterance.pitch = 1.0;
+
+        // Stop any current speech
+        window.speechSynthesis.cancel();
+
+        // Play the speech
+        window.speechSynthesis.speak(utterance);
     }
     
     validateInput(input) {
