@@ -3,33 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive ESL Worksheets</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <title>ESL Interactive Worksheets</title>
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
 </head>
 <body>
     <div class="container">
         <header class="site-header">
-            <h1>Interactive ESL Worksheets</h1>
-            <nav>
-                <a href="#" class="active">Home</a>
-                <a href="worksheets/">Worksheets</a>
-                <a href="levels/">Levels</a>
-                <a href="skills/">Skills</a>
-            </nav>
-        </header>
-        <main>
-            <div class="search-container">
-                <input type="text" id="search" placeholder="Search worksheets...">
-                <button id="search-btn">Search</button>
+            <h1>ESL Interactive Worksheets</h1>
+            
+            <!-- Level filter -->
+            <div class="level-filter">
+                <button data-level="a1">A1</button>
+                <button data-level="a2">A2</button>
+                <button data-level="b1" class="active">B1</button>
+                <button data-level="b2">B2</button>
+                <button data-level="c1">C1</button>
             </div>
-            <div class="featured-worksheets">
-                <h2>Featured Worksheets</h2>
-                <div class="worksheet-grid" id="featured-grid">
-                    <!-- Worksheets will be loaded dynamically -->
-                </div>
+
+            <!-- Skill filter -->
+            <div class="skill-filter">
+                <button data-skill="grammar" class="active">Grammar</button>
+                <button data-skill="vocabulary">Vocabulary</button>
+                <button data-skill="reading">Reading</button>
+                <button data-skill="listening">Listening</button>
+                <button data-skill="writing">Writing</button>
+                <button data-skill="speaking">Speaking</button>
+            </div>
+
+            <!-- Search -->
+            <div class="search">
+                <input type="text" id="search" placeholder="Search worksheets...">
+            </div>
+        </header>
+
+        <main>
+            <!-- Worksheet listing -->
+            <div class="worksheet-grid">
+                <!-- B1 Past vs Present Perfect -->
+                <a href="worksheets/b1-past-vs-perfect/index.html" class="worksheet-card" data-level="b1" data-skills="grammar">
+                    <h2>Past Simple vs Present Perfect</h2>
+                    <div class="meta">
+                        <span class="level">B1</span>
+                        <span class="time">20 min</span>
+                        <span class="skills">Grammar</span>
+                    </div>
+                    <p class="description">
+                        Practice when to use Past Simple and when to use Present Perfect with interactive exercises.
+                    </p>
+                    <div class="task-types">
+                        <span class="task-type">Multiple Choice</span>
+                        <span class="task-type">Fill in Blanks</span>
+                        <span class="task-type">Matching</span>
+                    </div>
+                </a>
+
+                <!-- More worksheet cards will be added here -->
             </div>
         </main>
     </div>
-    <script src="assets/js/main.js"></script>
+
+    <script>
+        // Simple filter functionality
+        document.querySelectorAll('.level-filter button, .skill-filter button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Toggle active state
+                const group = button.parentElement.querySelectorAll('button');
+                group.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Apply filters
+                applyFilters();
+            });
+        });
+
+        // Search functionality
+        document.getElementById('search').addEventListener('input', applyFilters);
+
+        function applyFilters() {
+            const activeLevel = document.querySelector('.level-filter button.active').dataset.level;
+            const activeSkill = document.querySelector('.skill-filter button.active').dataset.skill;
+            const searchText = document.getElementById('search').value.toLowerCase();
+
+            document.querySelectorAll('.worksheet-card').forEach(card => {
+                const matchesLevel = card.dataset.level === activeLevel;
+                const matchesSkill = card.dataset.skills.includes(activeSkill);
+                const matchesSearch = !searchText || 
+                    card.textContent.toLowerCase().includes(searchText);
+
+                card.style.display = 
+                    matchesLevel && matchesSkill && matchesSearch ? 'block' : 'none';
+            });
+        }
+    </script>
 </body>
 </html>
