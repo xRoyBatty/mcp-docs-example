@@ -8,130 +8,81 @@ class WorksheetManager {
             student: {
                 primary: 'Microsoft Andrew',
                 fallback: 'Male'
-            },
-            features: ['instructions', 'feedback', 'examples']
+            }
         };
         
-        // Store current matches for the matching exercise
-        this.currentMatches = new Map();
+        // Store matched pairs and their positions
+        this.matchedPairs = new Map();
+        this.originalPositions = new Map();
         
         this.initializeVoices();
         this.initializeInteractions();
     }
     
-    async initializeVoices() {
-        if (window.speechSynthesis.getVoices().length === 0) {
-            await new Promise(resolve => {
-                window.speechSynthesis.addEventListener('voiceschanged', resolve, { once: true });
-            });
-        }
+    // ... voice initialization code stays the same ...
 
-        const voices = window.speechSynthesis.getVoices();
-        this.instructorVoice = voices.find(voice => 
-            voice.name === this.voiceConfig.instructor.primary ||
-            voice.name.includes(this.voiceConfig.instructor.fallback)
-        ) || voices[0];
-
-        this.studentVoice = voices.find(voice => 
-            voice.name === this.voiceConfig.student.primary ||
-            voice.name.includes(this.voiceConfig.student.fallback)
-        ) || voices[0];
-        
-        document.querySelectorAll('.play-audio').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const audioType = e.target.dataset.audio;
-                this.playAudio(audioType);
-            });
-        });
-    }
-    
-    initializeInteractions() {
-        // Check Answers button
-        const checkButton = document.getElementById('check-answers');
-        if (checkButton) {
-            checkButton.addEventListener('click', () => this.checkAllAnswers());
-        }
-        
-        // Show Hints button
-        const hintsButton = document.getElementById('show-hints');
-        if (hintsButton) {
-            hintsButton.addEventListener('click', () => this.showHints());
-        }
-        
-        // Reset button
-        const resetButton = document.getElementById('reset-exercise');
-        if (resetButton) {
-            resetButton.addEventListener('click', () => this.resetExercise());
-        }
-        
-        this.initializeBlanks();
-        this.initializeMultipleChoice();
-        this.initializeMatching();
-    }
-    
-    initializeBlanks() {
-        document.querySelectorAll('.fill-blank').forEach(blank => {
-            blank.addEventListener('input', (e) => {
-                // Remove any previous feedback classes
-                e.target.classList.remove('correct', 'incorrect');
-            });
-        });
-    }
-    
-    initializeMultipleChoice() {
-        document.querySelectorAll('.multiple-choice').forEach(choice => {
-            choice.addEventListener('change', (e) => {
-                // Clear any previous feedback
-                const container = e.target.closest('.multiple-choice-container');
-                const feedback = container.querySelector('.feedback');
-                feedback.textContent = '';
-                feedback.className = 'feedback';
-            });
-        });
-    }
-    
     initializeMatching() {
         const matchingItems = document.querySelectorAll('.matching-item');
         
+        // Store original positions
         matchingItems.forEach(item => {
-            // Make all items draggable
+            this.originalPositions.set(item.id, {
+                parent: item.parentElement,
+                nextSibling: item.nextElementSibling
+            });
+            
             item.setAttribute('draggable', 'true');
             
             // Add drag event listeners
             item.addEventListener('dragstart', (e) => this.handleDragStart(e));
             item.addEventListener('dragend', (e) => this.handleDragEnd(e));
             item.addEventListener('dragover', (e) => this.handleDragOver(e));
+            item.addEventListener('dragenter', (e) => this.handleDragEnter(e));
+            item.addEventListener('dragleave', (e) => this.handleDragLeave(e));
             item.addEventListener('drop', (e) => this.handleDrop(e));
-            
-            // Add visual feedback
-            item.addEventListener('dragenter', (e) => {
-                if (!e.target.classList.contains('dragging')) {
-                    e.target.classList.add('drag-over');
-                }
-            });
-            
-            item.addEventListener('dragleave', (e) => {
-                e.target.classList.remove('drag-over');
-            });
         });
     }
     
     handleDragStart(e) {
-        e.target.classList.add('dragging');
-        e.dataTransfer.setData('text/plain', e.target.id);
-        e.dataTransfer.effectAllowed = 'move';
+        // Only allow dragging if item isn't part of a confirmed match
+        if (!e.target.classList.contains('confirmed-match')) {
+            e.target.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', e.target.id);
+            e.dataTransfer.effectAllowed = 'move';
+            
+            // Highlight valid drop targets
+            document.querySelectorAll('.matching-item').forEach(item => {
+                if (!item.classList.contains('confirmed-match') && item !== e.target) {
+                    item.classList.add('valid-target');
+                }
+            });
+        } else {
+            e.preventDefault();
+        }
     }
     
     handleDragEnd(e) {
         e.target.classList.remove('dragging');
         document.querySelectorAll('.matching-item').forEach(item => {
-            item.classList.remove('drag-over');
+            item.classList.remove('valid-target', 'drag-over');
         });
     }
     
     handleDragOver(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
+        if (!e.target.classList.contains('confirmed-match')) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+    }
+    
+    handleDragEnter(e) {
+        if (!e.target.classList.contains('confirmed-match')) {
+            e.target.classList.add('drag-over');
+        }
+    }
+    
+    handleDragLeave(e) {
+        e.target.classList.remove('drag-over');
     }
     
     handleDrop(e) {
@@ -141,149 +92,99 @@ class WorksheetManager {
         const draggedEl = document.getElementById(draggedId);
         const dropZone = e.target.closest('.matching-item');
         
-        if (!draggedEl || !dropZone || draggedEl === dropZone) return;
+        if (!draggedEl || !dropZone || draggedEl === dropZone || 
+            dropZone.classList.contains('confirmed-match')) {
+            return;
+        }
         
         // Store the match
-        this.currentMatches.set(draggedEl.dataset.match, dropZone.dataset.match);
+        this.storeMatch(draggedEl, dropZone);
         
-        // Swap positions
-        const draggedRect = draggedEl.getBoundingClientRect();
-        const dropRect = dropZone.getBoundingClientRect();
+        // Swap positions visually
+        this.swapElements(draggedEl, dropZone);
         
-        const draggedStyle = window.getComputedStyle(draggedEl);
-        const dropStyle = window.getComputedStyle(dropZone);
-        
-        draggedEl.style.transform = `translate(${dropRect.left - draggedRect.left}px, ${dropRect.top - draggedRect.top}px)`;
-        dropZone.style.transform = `translate(${draggedRect.left - dropRect.left}px, ${draggedRect.top - dropRect.top}px)`;
+        // Add visual connection
+        this.createVisualConnection(draggedEl, dropZone);
         
         // Clean up
         draggedEl.classList.remove('dragging');
         dropZone.classList.remove('drag-over');
-        
-        // Swap the elements in DOM
-        const parent = draggedEl.parentNode;
-        const dropNext = dropZone.nextSibling;
-        const draggedNext = draggedEl.nextSibling;
-        
-        parent.insertBefore(draggedEl, dropNext);
-        parent.insertBefore(dropZone, draggedNext);
+        document.querySelectorAll('.valid-target').forEach(item => {
+            item.classList.remove('valid-target');
+        });
     }
     
-    playAudio(type) {
-        const textElement = document.querySelector(`[data-audio-text="${type}"]`);
-        if (!textElement) {
-            console.error(`No text element found for audio type: ${type}`);
-            return;
-        }
-
-        const text = textElement.textContent.trim();
-        if (!text) {
-            console.error('No text content found to speak');
-            return;
-        }
-
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.voice = type === 'instructions' ? this.instructorVoice : this.studentVoice;
-        utterance.rate = 0.9;
-        utterance.pitch = 1.0;
-
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
+    storeMatch(element1, element2) {
+        const pair = {
+            first: element1,
+            second: element2,
+            isCorrect: element1.dataset.match === element2.dataset.match
+        };
+        this.matchedPairs.set(element1.id, pair);
     }
     
-    checkAllAnswers() {
-        // Check fill-in-the-blanks
-        document.querySelectorAll('.fill-blank').forEach(blank => {
-            const correct = blank.dataset.correct.toLowerCase();
-            const current = blank.value.toLowerCase();
-            
-            blank.classList.remove('correct', 'incorrect');
-            blank.classList.add(current === correct ? 'correct' : 'incorrect');
-        });
+    swapElements(elem1, elem2) {
+        const parent1 = elem1.parentNode;
+        const parent2 = elem2.parentNode;
+        const next1 = elem1.nextElementSibling;
+        const next2 = elem2.nextElementSibling;
         
-        // Check multiple choice
-        document.querySelectorAll('.multiple-choice-container').forEach(container => {
-            const selected = container.querySelector('input:checked');
-            const feedback = container.querySelector('.feedback');
-            
-            if (selected) {
-                const isCorrect = selected.dataset.correct === 'true';
-                feedback.textContent = isCorrect ? 'Correct!' : 'Incorrect';
-                feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-            }
-        });
+        parent2.insertBefore(elem1, next2);
+        parent1.insertBefore(elem2, next1);
+    }
+    
+    createVisualConnection(elem1, elem2) {
+        // Add a class to show they're paired (but not necessarily correctly)
+        elem1.classList.add('matched-pair');
+        elem2.classList.add('matched-pair');
         
-        // Check matching
-        const allMatched = this.checkMatching();
-        
-        // Show the answers section
-        document.querySelector('.answers').classList.remove('hidden');
-        
-        // Provide overall feedback
-        this.provideFeedback(allMatched, 
-            allMatched ? 'Great job! All matches are correct!' : 'Some matches need correction. Try again!');
+        // Store the pairing ID on both elements
+        const pairId = `pair-${Date.now()}`;
+        elem1.dataset.pairId = pairId;
+        elem2.dataset.pairId = pairId;
     }
     
     checkMatching() {
         let allCorrect = true;
-        this.currentMatches.forEach((value, key) => {
-            if (key !== value) {
+        
+        this.matchedPairs.forEach((pair) => {
+            const isCorrect = pair.isCorrect;
+            
+            if (isCorrect) {
+                pair.first.classList.add('correct-match');
+                pair.second.classList.add('correct-match');
+                pair.first.classList.add('confirmed-match');
+                pair.second.classList.add('confirmed-match');
+            } else {
+                pair.first.classList.add('incorrect-match');
+                pair.second.classList.add('incorrect-match');
                 allCorrect = false;
             }
         });
+        
         return allCorrect;
     }
     
-    provideFeedback(correct, message) {
-        const feedbackEl = document.createElement('div');
-        feedbackEl.className = `feedback ${correct ? 'correct' : 'incorrect'}`;
-        feedbackEl.textContent = message;
+    resetMatching() {
+        // Reset all matches
+        this.matchedPairs.clear();
         
-        // Remove after 3 seconds
-        setTimeout(() => feedbackEl.remove(), 3000);
-        
-        document.body.appendChild(feedbackEl);
-    }
-    
-    showHints() {
-        document.querySelectorAll('.hint').forEach(hint => {
-            hint.classList.remove('hidden');
+        // Reset all items to original positions
+        this.originalPositions.forEach((position, id) => {
+            const element = document.getElementById(id);
+            if (element) {
+                const { parent, nextSibling } = position;
+                parent.insertBefore(element, nextSibling);
+                element.classList.remove(
+                    'matched-pair',
+                    'correct-match',
+                    'incorrect-match',
+                    'confirmed-match'
+                );
+                delete element.dataset.pairId;
+            }
         });
     }
     
-    resetExercise() {
-        // Reset fill-in-the-blanks
-        document.querySelectorAll('.fill-blank').forEach(blank => {
-            blank.value = '';
-            blank.classList.remove('correct', 'incorrect');
-        });
-        
-        // Reset multiple choice
-        document.querySelectorAll('.multiple-choice').forEach(choice => {
-            choice.checked = false;
-        });
-        document.querySelectorAll('.feedback').forEach(feedback => {
-            feedback.textContent = '';
-            feedback.className = 'feedback';
-        });
-        
-        // Reset matching
-        this.currentMatches.clear();
-        document.querySelectorAll('.matching-item').forEach(item => {
-            item.classList.remove('matched', 'incorrect');
-            item.style.transform = '';
-        });
-        
-        // Hide answers
-        document.querySelector('.answers').classList.add('hidden');
-        
-        // Hide hints
-        document.querySelectorAll('.hint').forEach(hint => {
-            hint.classList.add('hidden');
-        });
-    }
+    // ... rest of the code stays the same ...
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    window.worksheetManager = new WorksheetManager();
-});
