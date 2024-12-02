@@ -1,0 +1,38 @@
+{
+    "id": "b1-past-vs-perfect",
+    "title": "Past Simple vs Present Perfect",
+    "level": "B1",
+    "skills": ["grammar"],
+    "timeEstimate": 20,
+    "tasks": [
+        {
+            "type": "multiChoice",
+            "weight": 0.4
+        },
+        {
+            "type": "fillBlanks",
+            "weight": 0.3
+        },
+        {
+            "type": "matching",
+            "weight": 0.3
+        }
+    ],
+    "prerequisites": [
+        "Understanding of basic verb tenses",
+        "Knowledge of Past Simple forms",
+        "Knowledge of Present Perfect forms"
+    ],
+    "learningObjectives": [
+        "Distinguish between Past Simple and Present Perfect usage",
+        "Identify time expressions that indicate tense choice",
+        "Use both tenses correctly in context"
+    ],
+    "keywords": [
+        "past simple",
+        "present perfect",
+        "tenses",
+        "grammar",
+        "time expressions"
+    ]
+}
