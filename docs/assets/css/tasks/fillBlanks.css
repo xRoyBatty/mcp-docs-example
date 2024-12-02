@@ -1,0 +1,23 @@
+/* Fill in the blanks task styles */
+
+.fill-blanks .blank {
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-xs);
+    margin: 0 var(--spacing-xs);
+    min-width: 100px;
+}
+
+.fill-blanks .blank:focus {
+    outline: none;
+    border-bottom-color: var(--color-primary);
+}
+
+/* States */
+.fill-blanks .blank[data-state="correct"] {
+    border-bottom-color: var(--color-success);
+}
+
+.fill-blanks .blank[data-state="incorrect"] {
+    border-bottom-color: var(--color-error);
+}

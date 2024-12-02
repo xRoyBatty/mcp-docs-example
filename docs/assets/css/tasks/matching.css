@@ -1,0 +1,30 @@
+/* Matching task styles */
+
+.matching-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+}
+
+.matching-item {
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    cursor: move;
+    user-select: none;
+}
+
+/* Drag states */
+.matching-item[data-state="dragging"] {
+    opacity: 0.5;
+}
+
+.matching-item[data-state="matched"] {
+    border-color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .matching-container {
+        grid-template-columns: 1fr;
+    }
+}
