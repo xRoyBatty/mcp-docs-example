@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{TITLE} | ESL Worksheets</title>
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/layout.css">
+    <!-- Task-specific CSS will be loaded dynamically based on included tasks -->
+</head>
+<body>
+    <div class="worksheet">
+        <header class="worksheet-header">
+            <h1>{TITLE}</h1>
+            <div class="worksheet-meta">
+                <span>Level: {LEVEL}</span>
+                <span>Time: {TIME}</span>
+                <span>Skills: {SKILLS}</span>
+            </div>
+        </header>
+
+        <main class="worksheet-content">
+            <section class="instructions">
+                <h2>Instructions</h2>
+                <div class="instructions-text" data-audio="instructions">
+                    {INSTRUCTIONS}
+                </div>
+                <button type="button" class="audio-btn" data-audio-target="instructions">Listen</button>
+            </section>
+
+            <!-- Task containers will be inserted here -->
+            <div id="tasks-container"></div>
+        </main>
+
+        <footer class="worksheet-footer">
+            <button type="button" id="check">Check Answers</button>
+            <button type="button" id="retry">Try Again</button>
+        </footer>
+    </div>
+
+    <script src="../assets/js/worksheetManager.js" type="module"></script>
+    <!-- Task-specific JS will be loaded dynamically -->
+</body>
+</html>
