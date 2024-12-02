@@ -7,8 +7,98 @@
     <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/layout.css">
     <link rel="stylesheet" href="assets/css/hub.css">
+    <link rel="stylesheet" href="assets/css/components.css">
 </head>
 <body>
-    <!-- Rest of the hub page content remains the same -->
+    <div class="container">
+        <header class="site-header">
+            <h1>ESL Interactive Worksheets</h1>
+            
+            <div class="level-filter">
+                <button data-level="a1">A1</button>
+                <button data-level="a2">A2</button>
+                <button data-level="b1" class="active">B1</button>
+                <button data-level="b2">B2</button>
+                <button data-level="c1">C1</button>
+            </div>
+
+            <div class="skill-filter">
+                <button data-skill="grammar" class="active">Grammar</button>
+                <button data-skill="vocabulary">Vocabulary</button>
+                <button data-skill="reading">Reading</button>
+                <button data-skill="listening">Listening</button>
+                <button data-skill="writing">Writing</button>
+                <button data-skill="speaking">Speaking</button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="search" class="search-input" placeholder="Search worksheets...">
+            </div>
+        </header>
+
+        <main>
+            <div class="worksheet-grid">
+                <a href="worksheets/b1-past-vs-perfect/index.html" class="worksheet-card" data-level="b1" data-skills="grammar">
+                    <h2>Past Simple vs Present Perfect</h2>
+                    <div class="worksheet-meta">
+                        <span class="level">B1</span>
+                        <span class="time">20 min</span>
+                        <span class="skills">Grammar</span>
+                    </div>
+                    <p class="worksheet-description">
+                        Practice when to use Past Simple and when to use Present Perfect with interactive exercises.
+                    </p>
+                    <div class="worksheet-tags">
+                        <span class="worksheet-tag">Multiple Choice</span>
+                        <span class="worksheet-tag">Fill in Blanks</span>
+                        <span class="worksheet-tag">Matching</span>
+                    </div>
+                </a>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-content">
+                <nav class="footer-nav">
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy Policy</a>
+                </nav>
+                <p>&copy; 2024 ESL Interactive Worksheets. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Filter and search functionality
+        document.querySelectorAll('.level-filter button, .skill-filter button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Toggle active state within button group
+                const group = button.parentElement.querySelectorAll('button');
+                group.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                applyFilters();
+            });
+        });
+
+        document.getElementById('search').addEventListener('input', applyFilters);
+
+        function applyFilters() {
+            const activeLevel = document.querySelector('.level-filter button.active').dataset.level;
+            const activeSkill = document.querySelector('.skill-filter button.active').dataset.skill;
+            const searchText = document.getElementById('search').value.toLowerCase();
+
+            document.querySelectorAll('.worksheet-card').forEach(card => {
+                const matchesLevel = card.dataset.level === activeLevel;
+                const matchesSkill = card.dataset.skills.includes(activeSkill);
+                const matchesSearch = !searchText || 
+                    card.textContent.toLowerCase().includes(searchText);
+
+                card.style.display = 
+                    matchesLevel && matchesSkill && matchesSearch ? 'block' : 'none';
+            });
+        }
+    </script>
 </body>
 </html>
