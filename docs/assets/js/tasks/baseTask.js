@@ -16,7 +16,7 @@ export default class BaseTask {
         try {
             const link = document.createElement('link');
             link.rel = 'stylesheet';
-            link.href = `../assets/css/tasks/${this.type}.css`;
+            link.href = `../../assets/css/tasks/${this.type}.css`;
             document.head.appendChild(link);
             await new Promise((resolve, reject) => {
                 link.onload = resolve;
