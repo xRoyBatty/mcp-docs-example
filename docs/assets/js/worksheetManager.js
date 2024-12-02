@@ -86,7 +86,7 @@ export class WorksheetManager {
     static async loadTaskStyles(taskType) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = `../../assets/css/tasks/${taskType}.css`;
+        link.href = `../assets/css/tasks/${taskType}.css`;
         document.head.appendChild(link);
         return new Promise((resolve, reject) => {
             link.onload = resolve;
