@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{TITLE} | ESL Worksheets</title>
-    <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/layout.css">
-    <!-- Task-specific CSS will be loaded dynamically based on included tasks -->
+    <title>Worksheet Title | ESL Worksheets</title>
+    <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="../../assets/css/layout.css">
 </head>
 <body>
     <div class="worksheet">
         <header class="worksheet-header">
-            <h1>{TITLE}</h1>
+            <h1>Sample Worksheet Title</h1>
             <div class="worksheet-meta">
-                <span>Level: {LEVEL}</span>
-                <span>Time: {TIME}</span>
-                <span>Skills: {SKILLS}</span>
+                <span>Level: B1</span>
+                <span>Time: 20 minutes</span>
+                <span>Skills: Grammar</span>
             </div>
         </header>
 
@@ -23,13 +22,57 @@
             <section class="instructions">
                 <h2>Instructions</h2>
                 <div class="instructions-text" data-audio="instructions">
-                    {INSTRUCTIONS}
+                    Example instructions for this worksheet. Explain what students need to do.
                 </div>
                 <button type="button" class="audio-btn" data-audio-target="instructions">Listen</button>
             </section>
 
-            <!-- Task containers will be inserted here -->
-            <div id="tasks-container"></div>
+            <!-- Example Multiple Choice Task -->
+            <section class="task multi-choice" data-task-type="multiChoice">
+                <h2>Task 1: Multiple Choice Example</h2>
+                <p class="task-instructions">Choose the correct answer for each question.</p>
+
+                <div class="questions-container">
+                    <div class="question" data-index="1">
+                        <p class="question-text">Sample question 1?</p>
+                        <div class="options">
+                            <label class="option">
+                                <input type="radio" name="q1" value="1">
+                                <span class="option-text">Option A</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q1" value="2" data-correct="true">
+                                <span class="option-text">Option B</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Example Fill in the Blanks Task -->
+            <section class="task fill-blanks" data-task-type="fillBlanks">
+                <h2>Task 2: Fill in the Blanks Example</h2>
+                <p class="task-instructions">Complete the sentences with the correct words.</p>
+
+                <div class="task-content">
+                    <p>The sun <input type="text" class="blank" data-correct="rises" data-index="1"> in the east.</p>
+                </div>
+            </section>
+
+            <!-- Example Matching Task -->
+            <section class="task matching" data-task-type="matching">
+                <h2>Task 3: Matching Example</h2>
+                <p class="task-instructions">Match the items from the left with their correct pairs on the right.</p>
+
+                <div class="matching-container">
+                    <div class="matching-prompts">
+                        <div class="matching-item" data-index="1" data-pair="a">First item</div>
+                    </div>
+                    <div class="matching-responses">
+                        <div class="matching-item" data-index="2" data-pair="a">Matching item</div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <footer class="worksheet-footer">
@@ -38,7 +81,6 @@
         </footer>
     </div>
 
-    <script src="../assets/js/worksheetManager.js" type="module"></script>
-    <!-- Task-specific JS will be loaded dynamically -->
+    <script src="../../assets/js/worksheetManager.js" type="module"></script>
 </body>
 </html>
