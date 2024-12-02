@@ -1,20 +1,10 @@
-<section class="task fill-blanks" data-task-type="fill-blanks">
-    <h2>{TASK_TITLE}</h2>
+<!-- Fill in the Blanks Task Template -->
+<section class="task fill-blanks" data-task-type="fillBlanks">
+    <h2>Fill in the Blanks</h2>
     
-    <!-- Optional task instructions -->
-    <p class="task-instructions">{TASK_INSTRUCTIONS}</p>
+    <p class="task-instructions">Complete each sentence with the correct word or phrase.</p>
     
-    <!-- Content container -->
     <div class="task-content">
-        {CONTENT_WITH_BLANKS}
+        <p>Example: The cat <input type="text" class="blank" data-correct="sits" data-index="1"> on the mat.</p>
     </div>
-    
-    <!-- Template for blanks -->
-    <template id="blank-template">
-        <input type="text" 
-               class="blank" 
-               data-correct="{CORRECT_ANSWER}"
-               data-index="{INDEX}"
-               aria-label="Blank {INDEX}">
-    </template>
 </section>

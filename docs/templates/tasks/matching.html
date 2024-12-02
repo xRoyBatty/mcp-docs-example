@@ -1,29 +1,16 @@
+<!-- Matching Task Template -->
 <section class="task matching" data-task-type="matching">
-    <h2>{TASK_TITLE}</h2>
+    <h2>Matching Exercise</h2>
     
-    <!-- Optional task instructions -->
-    <p class="task-instructions">{TASK_INSTRUCTIONS}</p>
+    <p class="task-instructions">Match the items on the left with their corresponding pairs on the right.</p>
     
-    <!-- Content container -->
     <div class="matching-container">
-        <!-- First column for prompts -->
         <div class="matching-prompts">
-            {PROMPTS}
+            <div class="matching-item" data-index="1" data-pair="example1">Example left item</div>
         </div>
         
-        <!-- Second column for responses -->
         <div class="matching-responses">
-            {RESPONSES}
+            <div class="matching-item" data-index="2" data-pair="example1">Example right item</div>
         </div>
     </div>
-    
-    <!-- Templates -->
-    <template id="matching-item-template">
-        <div class="matching-item" 
-             draggable="true"
-             data-index="{INDEX}"
-             data-pair="{PAIR_ID}">
-            {CONTENT}
-        </div>
-    </template>
 </section>
