@@ -1,0 +1,106 @@
+/* Navigation bar styles */
+.worksheet-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Home link */
+.nav-home {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--color-text);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.nav-home:hover {
+    background-color: var(--color-background);
+    color: var(--color-primary);
+}
+
+.nav-home svg {
+    transition: transform 0.3s ease;
+}
+
+.nav-home:hover svg {
+    transform: translateX(-2px);
+}
+
+/* Progress bar */
+.nav-progress {
+    flex: 1;
+    max-width: 400px;
+    margin: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: var(--color-background);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--color-primary);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    text-align: center;
+}
+
+/* Level indicator */
+.nav-level {
+    padding: 0.5rem 1rem;
+    background-color: var(--color-background);
+    border-radius: 4px;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0.5rem;
+    }
+
+    .nav-progress {
+        margin: 0;
+        width: 100%;
+        max-width: none;
+    }
+
+    .nav-home {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .nav-level {
+        width: 100%;
+        text-align: center;
+    }
+}
