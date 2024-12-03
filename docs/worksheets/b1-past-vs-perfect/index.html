@@ -3,113 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Past Simple vs Present Perfect | ESL Worksheets</title>
+    <title>Past Simple vs Present Perfect | B1 Interactive Practice</title>
     <link rel="stylesheet" href="../../assets/css/base.css">
     <link rel="stylesheet" href="../../assets/css/layout.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/tasks/base-task.css">
 </head>
 <body>
-    <div class="worksheet">
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="visually-hidden focus-visible">Skip to main content</a>
+
+    <nav class="worksheet-nav" role="navigation" aria-label="Worksheet navigation">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-home btn btn-outline" aria-label="Back to worksheets hub">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Back to Worksheets</span>
+            </a>
+
+            <div class="nav-progress" role="progressbar" aria-label="Worksheet progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <span class="progress-text">0% Complete</span>
+            </div>
+
+            <div class="nav-level">
+                <span class="level-label">Level:</span>
+                <span class="level-value">B1</span>
+            </div>
+
+            <div class="voice-control">
+                <label for="globalVoice" class="voice-label">Voice:</label>
+                <select id="globalVoice" class="voice-select" aria-label="Select voice for audio playback"></select>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content" class="worksheet" role="main">
         <header class="worksheet-header">
-            <h1>Past Simple vs Present Perfect</h1>
+            <h1 class="worksheet-title">Past Simple vs Present Perfect</h1>
+            
             <div class="worksheet-meta">
-                <span>Level: B1</span>
-                <span>Time: 20 minutes</span>
-                <span>Skills: Grammar</span>
+                <span class="meta-item">
+                    <span class="meta-label">Level:</span>
+                    <span class="meta-value">B1</span>
+                </span>
+                <span class="meta-item">
+                    <span class="meta-label">Time:</span>
+                    <span class="meta-value">20 minutes</span>
+                </span>
+                <span class="meta-item">
+                    <span class="meta-label">Skills:</span>
+                    <span class="meta-value">Grammar</span>
+                </span>
             </div>
         </header>
 
-        <main class="worksheet-content">
-            <section class="instructions">
-                <h2>Instructions</h2>
-                <div class="instructions-text" data-audio="instructions">
+        <div class="worksheet-content">
+            <section class="instructions" aria-labelledby="instructions-title">
+                <h2 id="instructions-title">Instructions</h2>
+                <div class="task-instructions" data-audio="instructions">
                     This worksheet will help you understand when to use Past Simple and when to use Present Perfect.
                     Pay attention to time expressions and whether the action is finished or connected to the present.
                 </div>
-                <button type="button" class="audio-btn" data-audio-target="instructions">Listen</button>
             </section>
 
-            <!-- Task 1: Multiple Choice -->
-            <section class="task multi-choice" data-task-type="multiChoice">
-                <h2>Task 1: Choose the Correct Tense</h2>
-                <p class="task-instructions">Select the correct form of the verb for each sentence.</p>
+            <!-- Multiple Choice Task -->
+            <section class="task multiple-choice" data-task-type="multiChoice" aria-labelledby="tense-choice-title">
+                <h2 id="tense-choice-title" class="task-title">1. Choose the Correct Tense</h2>
+                <div class="task-instructions">Select the correct form of the verb for each sentence.</div>
 
-                <div class="questions-container">
-                    <div class="question" data-index="1">
-                        <p class="question-text">I _____ to Paris three times in my life.</p>
-                        <div class="options">
+                <div class="questions-container" role="group" aria-label="Verb tense questions">
+                    <div class="question" data-index="1" role="group" aria-labelledby="q1-text">
+                        <p id="q1-text" class="question-text">I _____ to Paris three times in my life.</p>
+                        <div class="options" role="radiogroup" aria-labelledby="q1-text">
                             <label class="option">
-                                <input type="radio" name="q1" value="1">
-                                <span class="option-text">went</span>
+                                <input type="radio" name="q1" value="1" aria-labelledby="q1-opt1">
+                                <span id="q1-opt1" class="option-text">went</span>
                             </label>
                             <label class="option">
-                                <input type="radio" name="q1" value="2" data-correct="true">
-                                <span class="option-text">have been</span>
+                                <input type="radio" name="q1" value="2" data-correct="true" aria-labelledby="q1-opt2">
+                                <span id="q1-opt2" class="option-text">have been</span>
                             </label>
                             <label class="option">
-                                <input type="radio" name="q1" value="3">
-                                <span class="option-text">have went</span>
+                                <input type="radio" name="q1" value="3" aria-labelledby="q1-opt3">
+                                <span id="q1-opt3" class="option-text">have went</span>
                             </label>
                         </div>
                     </div>
 
-                    <div class="question" data-index="2">
-                        <p class="question-text">She _____ her phone yesterday morning.</p>
-                        <div class="options">
+                    <div class="question" data-index="2" role="group" aria-labelledby="q2-text">
+                        <p id="q2-text" class="question-text">She _____ her phone yesterday morning.</p>
+                        <div class="options" role="radiogroup" aria-labelledby="q2-text">
                             <label class="option">
-                                <input type="radio" name="q2" value="1" data-correct="true">
-                                <span class="option-text">lost</span>
+                                <input type="radio" name="q2" value="1" data-correct="true" aria-labelledby="q2-opt1">
+                                <span id="q2-opt1" class="option-text">lost</span>
                             </label>
                             <label class="option">
-                                <input type="radio" name="q2" value="2">
-                                <span class="option-text">has lost</span>
+                                <input type="radio" name="q2" value="2" aria-labelledby="q2-opt2">
+                                <span id="q2-opt2" class="option-text">has lost</span>
                             </label>
                             <label class="option">
-                                <input type="radio" name="q2" value="3">
-                                <span class="option-text">have lost</span>
+                                <input type="radio" name="q2" value="3" aria-labelledby="q2-opt3">
+                                <span id="q2-opt3" class="option-text">have lost</span>
                             </label>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Task 2: Fill in the Blanks -->
-            <section class="task fill-blanks" data-task-type="fillBlanks">
-                <h2>Task 2: Complete the Sentences</h2>
-                <p class="task-instructions">Fill in the blanks with the correct form of the verb in brackets.</p>
+            <!-- Fill in the Blanks Task -->
+            <section class="task fill-blanks" data-task-type="fillBlanks" aria-labelledby="complete-sentences-title">
+                <h2 id="complete-sentences-title" class="task-title">2. Complete the Sentences</h2>
+                <div class="task-instructions">Fill in the blanks with the correct form of the verb in brackets.</div>
 
                 <div class="task-content">
-                    <p>1. John <input type="text" class="blank" data-correct="has never eaten" data-index="1"> (never/eat) sushi before.</p>
-                    <p>2. Last summer, we <input type="text" class="blank" data-correct="visited" data-index="2"> (visit) Rome for a week.</p>
-                    <p>3. I <input type="text" class="blank" data-correct="have lived" data-index="3"> (live) in this city since 2015.</p>
+                    <div class="sentence">
+                        <span class="sentence-text">1. John </span>
+                        <input type="text" 
+                               class="blank-input" 
+                               data-correct="has never eaten" 
+                               data-index="1"
+                               aria-label="Fill in: John ___ (never/eat) sushi before."
+                               autocomplete="off"
+                               spellcheck="false">
+                        <span class="sentence-text"> (never/eat) sushi before.</span>
+                    </div>
+                    <div class="sentence">
+                        <span class="sentence-text">2. Last summer, we </span>
+                        <input type="text" 
+                               class="blank-input" 
+                               data-correct="visited" 
+                               data-index="2"
+                               aria-label="Fill in: Last summer, we ___ (visit) Rome for a week."
+                               autocomplete="off"
+                               spellcheck="false">
+                        <span class="sentence-text"> (visit) Rome for a week.</span>
+                    </div>
+                    <div class="sentence">
+                        <span class="sentence-text">3. I </span>
+                        <input type="text" 
+                               class="blank-input" 
+                               data-correct="have lived" 
+                               data-index="3"
+                               aria-label="Fill in: I ___ (live) in this city since 2015."
+                               autocomplete="off"
+                               spellcheck="false">
+                        <span class="sentence-text"> (live) in this city since 2015.</span>
+                    </div>
                 </div>
             </section>
 
-            <!-- Task 3: Matching -->
-            <section class="task matching" data-task-type="matching">
-                <h2>Task 3: Match Sentences with Time Expressions</h2>
-                <p class="task-instructions">Match each sentence with the correct time expression. Drag and drop to match.</p>
+            <!-- Matching Task -->
+            <section class="task matching" data-task-type="matching" aria-labelledby="time-expressions-title">
+                <h2 id="time-expressions-title" class="task-title">3. Match Time Expressions</h2>
+                <div class="task-instructions">Match each sentence with its correct time expression.</div>
 
-                <div class="matching-container">
-                    <div class="matching-prompts">
-                        <div class="matching-item" data-index="1" data-pair="yesterday">I saw that movie</div>
-                        <div class="matching-item" data-index="2" data-pair="never">They have been to Australia</div>
-                        <div class="matching-item" data-index="3" data-pair="since">We have lived here</div>
+                <div class="pairs-container" role="application" aria-label="Time expressions matching exercise">
+                    <div class="left-items" role="group" aria-label="Sentences">
+                        <div class="match-item" 
+                             data-pair="yesterday" 
+                             tabindex="0" 
+                             role="button"
+                             aria-label="I saw that movie">
+                            I saw that movie
+                        </div>
+                        <div class="match-item" 
+                             data-pair="never" 
+                             tabindex="0" 
+                             role="button"
+                             aria-label="They have been to Australia">
+                            They have been to Australia
+                        </div>
+                        <div class="match-item" 
+                             data-pair="since" 
+                             tabindex="0" 
+                             role="button"
+                             aria-label="We have lived here">
+                            We have lived here
+                        </div>
                     </div>
 
-                    <div class="matching-responses">
-                        <div class="matching-item" data-index="4" data-pair="since">since 2010</div>
-                        <div class="matching-item" data-index="5" data-pair="yesterday">yesterday evening</div>
-                        <div class="matching-item" data-index="6" data-pair="never">never before</div>
+                    <div class="right-items" role="group" aria-label="Time expressions">
+                        <div class="match-item" 
+                             data-pair="since" 
+                             tabindex="0" 
+                             role="button"
+                             aria-label="since 2010">
+                            since 2010
+                        </div>
+                        <div class="match-item" 
+                             data-pair="yesterday" 
+                             tabindex="0" 
+                             role="button"
+                             aria-label="yesterday evening">
+                            yesterday evening
+                        </div>
+                        <div class="match-item" 
+                             data-pair="never" 
+                             tabindex="0" 
+                             role="button"
+                             aria-label="never before">
+                            never before
+                        </div>
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
 
         <footer class="worksheet-footer">
-            <button type="button" id="check">Check Answers</button>
-            <button type="button" id="retry">Try Again</button>
+            <div class="button-group">
+                <button type="button" id="check" class="btn btn-primary">
+                    Check Answers
+                </button>
+                <button type="button" id="retry" class="btn btn-secondary">
+                    Try Again
+                </button>
+            </div>
+            <div aria-live="polite" class="feedback-region visually-hidden"></div>
         </footer>
-    </div>
+    </main>
 
     <script src="../../assets/js/worksheetManager.js" type="module"></script>
 </body>
