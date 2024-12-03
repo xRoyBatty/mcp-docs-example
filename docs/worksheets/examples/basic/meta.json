@@ -1,0 +1,17 @@
+{
+    "title": "Basic Example",
+    "level": "Example",
+    "category": "Mixed",
+    "tags": ["example", "demo", "all-tasks"],
+    "description": "An example worksheet demonstrating all available task types with proper styling.",
+    "objectives": [
+        "Demonstrate multiple choice tasks",
+        "Show fill in the blanks usage",
+        "Present matching exercises",
+        "Illustrate dictation functionality"
+    ],
+    "estimatedTime": "10 minutes",
+    "taskTypes": ["multiChoice", "fillBlanks", "matching", "dictation"],
+    "skillsFocus": ["mixed"],
+    "prerequisites": ["None"]
+}
