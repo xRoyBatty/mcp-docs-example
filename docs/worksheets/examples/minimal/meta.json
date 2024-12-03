@@ -1,0 +1,17 @@
+{
+    "title": "Task Type Examples",
+    "level": "Mixed",
+    "category": "Examples",
+    "tags": ["example", "minimal", "task-types"],
+    "description": "One example of each task type to demonstrate basic functionality.",
+    "objectives": [
+        "Show multiple choice functionality",
+        "Demonstrate fill in the blanks",
+        "Present matching mechanism",
+        "Show dictation system"
+    ],
+    "estimatedTime": "5 minutes",
+    "taskTypes": ["multiChoice", "fillBlanks", "matching", "dictation"],
+    "skillsFocus": ["mixed"],
+    "prerequisites": ["None"]
+}
