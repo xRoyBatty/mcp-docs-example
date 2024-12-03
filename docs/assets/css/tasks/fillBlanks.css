@@ -1,125 +1,29 @@
-/* Fill in the blanks task styles */
-@import 'base-task.css';
-
-.fill-blanks .sentences-container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-}
-
-/* Sentence styling */
-.fill-blanks .sentence {
-    composes: task-item;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
+/* Fill in the Blanks Styles */
+.fill-blanks .content {
     line-height: 2;
-    animation: slideIn var(--transition-base);
 }
 
-/* Input styling */
-.fill-blanks .blank-input {
-    width: 150px;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border: 2px solid var(--task-border-color);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-base);
-    transition: all var(--transition-base);
-    background: var(--task-background);
+.fill-blanks input {
+    width: 120px;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 0 4px;
 }
 
-.fill-blanks .blank-input:focus {
+.fill-blanks input:focus {
     outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    border-color: #0066cc;
+    box-shadow: 0 0 0 2px rgba(0,102,204,0.2);
 }
 
-/* Input states */
-.fill-blanks .blank-input.correct {
-    border-color: var(--color-success);
-    background-color: rgba(40, 167, 69, 0.1);
+/* States */
+.fill-blanks input.correct {
+    border-color: #28a745;
+    background: #d4edda;
 }
 
-.fill-blanks .blank-input.incorrect {
-    border-color: var(--color-danger);
-    background-color: rgba(220, 53, 69, 0.1);
-}
-
-/* Tooltip styling */
-.fill-blanks .tooltip {
-    position: relative;
-    display: inline-block;
-}
-
-.fill-blanks .tooltip .tooltip-text {
-    visibility: hidden;
-    position: absolute;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--color-dark);
-    color: var(--color-white);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-sm);
-    white-space: nowrap;
-    z-index: var(--z-tooltip);
-    opacity: 0;
-    transition: opacity var(--transition-base);
-}
-
-.fill-blanks .tooltip .tooltip-text::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: var(--color-dark) transparent transparent transparent;
-}
-
-.fill-blanks .tooltip:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
-}
-
-/* Sentence numbering */
-.fill-blanks .sentence-number {
-    color: var(--task-text-light);
-    font-weight: 500;
-    margin-right: var(--spacing-sm);
-    min-width: 1.5rem;
-}
-
-/* Help text */
-.fill-blanks .help-text {
-    font-size: var(--font-size-sm);
-    color: var(--task-text-light);
-    margin-top: var(--spacing-sm);
-    font-style: italic;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    .fill-blanks .blank-input {
-        width: 120px;
-        font-size: var(--font-size-sm);
-    }
-
-    .fill-blanks .sentence {
-        padding: var(--spacing-sm);
-        gap: var(--spacing-xs);
-    }
-
-    .fill-blanks .sentence-number {
-        min-width: 1.2rem;
-    }
-
-    .fill-blanks .tooltip .tooltip-text {
-        font-size: var(--font-size-xs);
-        padding: var(--spacing-xs);
-    }
+.fill-blanks input.incorrect {
+    border-color: #dc3545;
+    background: #f8d7da;
 }
