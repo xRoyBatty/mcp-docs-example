@@ -1,0 +1,17 @@
+{
+    "title": "Weather and Seasons",
+    "level": "B1",
+    "category": "Listening",
+    "tags": ["weather", "seasons", "vocabulary", "listening"],
+    "description": "Practice weather-related vocabulary and listening comprehension through various interactive tasks.",
+    "objectives": [
+        "Understand weather-related vocabulary",
+        "Practice listening comprehension",
+        "Identify weather phenomena",
+        "Write weather descriptions from dictation"
+    ],
+    "estimatedTime": "20 minutes",
+    "taskTypes": ["multipleChoice", "fillBlanks", "matching", "dictation"],
+    "skillsFocus": ["listening", "writing", "vocabulary"],
+    "prerequisites": ["Basic weather vocabulary", "Basic sentence structure"]
+}
