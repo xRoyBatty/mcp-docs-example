@@ -24,20 +24,14 @@ export default class BaseTask {
         this.setupVoiceSupport();
     }
 
-    async loadStyles() {
-        try {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = `../../assets/css/tasks/${this.type}.css`;
-            document.head.appendChild(link);
-            await new Promise((resolve, reject) => {
-                link.onload = resolve;
-                link.onerror = reject;
-            });
-        } catch (error) {
-            console.error(`Failed to load styles for task type: ${this.type}`, error);
-        }
+async loadStyles() {
+    if (!document.querySelector(`link[href*="${this.type}.css"]`)) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = `../../assets/css/tasks/${this.type}.css`;
+        document.head.appendChild(link);
     }
+}
 
     setupVoiceSupport() {
         // Initialize global voice selector if not exists
