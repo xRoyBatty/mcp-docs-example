@@ -4,124 +4,223 @@ export default class MatchingTask extends BaseTask {
     constructor(element) {
         super(element);
         this.selectedItem = null;
-        this.matches = new Map(); // Stores current matches
-        this.lines = new Map(); // Stores SVG lines for connections
+        this.state = {
+            ...this.state,
+            matches: new Map(),
+            lines: new Map()
+        };
         
+        this.initializeTask();
+    }
+
+    initializeTask() {
         this.initializeSVG();
         this.initializeItems();
+        this.handleAriaLabels();
+        this.setupKeyboardNav();
+        this.addErrorHandling();
+    }
+
+    handleAriaLabels() {
+        this.element.setAttribute('role', 'application');
+        this.element.setAttribute('aria-label', 'Matching task');
+        
+        // Add aria-live region for feedback
+        const feedbackRegion = document.createElement('div');
+        feedbackRegion.setAttribute('aria-live', 'polite');
+        feedbackRegion.className = 'visually-hidden feedback-region';
+        this.element.appendChild(feedbackRegion);
+        this.feedbackRegion = feedbackRegion;
     }
 
     initializeSVG() {
-        // Create SVG overlay for drawing lines
         this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        this.svg.style.position = 'absolute';
-        this.svg.style.top = '0';
-        this.svg.style.left = '0';
-        this.svg.style.width = '100%';
-        this.svg.style.height = '100%';
-        this.svg.style.pointerEvents = 'none';
+        this.svg.setAttribute('class', 'connections-overlay');
+        this.svg.setAttribute('aria-hidden', 'true');
         
-        // Add SVG to the matching container
-        const container = this.element.querySelector('.matching-container');
+        const container = this.element.querySelector('.pairs-container');
         container.style.position = 'relative';
         container.prepend(this.svg);
+
+        // Resize observer for responsive SVG
+        new ResizeObserver(() => this.updateAllLines()).observe(container);
     }
 
     initializeItems() {
-        const items = this.element.querySelectorAll('.matching-item');
+        const leftItems = this.element.querySelectorAll('.left-items .match-item');
+        const rightItems = this.element.querySelectorAll('.right-items .match-item');
         
-        items.forEach((item, index) => {
-            // Add numbers to items
-            const itemNumber = document.createElement('span');
-            itemNumber.className = 'item-number';
-            itemNumber.textContent = Math.floor(index/2) + 1;
-            item.prepend(itemNumber);
+        leftItems.forEach((item, index) => {
+            item.setAttribute('role', 'button');
+            item.setAttribute('tabindex', '0');
+            item.setAttribute('aria-label', `Left item ${index + 1}`);
+            item.dataset.index = index;
             
-            // Add click handlers
-            item.addEventListener('click', (e) => this.handleClick(e));
+            const number = document.createElement('span');
+            number.className = 'item-number';
+            number.textContent = index + 1;
+            number.setAttribute('aria-hidden', 'true');
+            item.prepend(number);
         });
+
+        rightItems.forEach((item, index) => {
+            item.setAttribute('role', 'button');
+            item.setAttribute('tabindex', '0');
+            item.setAttribute('aria-label', `Right item ${index + 1}`);
+            item.dataset.index = index;
+            
+            const number = document.createElement('span');
+            number.className = 'item-number';
+            number.textContent = index + 1;
+            number.setAttribute('aria-hidden', 'true');
+            item.prepend(number);
+        });
+    }
+
+    setupKeyboardNav() {
+        this.element.addEventListener('keydown', (e) => {
+            const item = e.target.closest('.match-item');
+            if (!item) return;
+
+            switch (e.key) {
+                case 'Enter':
+                case ' ':
+                    e.preventDefault();
+                    this.handleClick({ currentTarget: item });
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    this.focusAdjacentItem(item, 'prev');
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    this.focusAdjacentItem(item, 'next');
+                    break;
+            }
+        });
+
+        this.element.addEventListener('click', (e) => {
+            const item = e.target.closest('.match-item');
+            if (item) this.handleClick(e);
+        });
+    }
+
+    focusAdjacentItem(currentItem, direction) {
+        const container = currentItem.closest('.left-items, .right-items');
+        const items = Array.from(container.querySelectorAll('.match-item'));
+        const currentIndex = items.indexOf(currentItem);
+        const targetIndex = direction === 'prev' ? 
+            (currentIndex - 1 + items.length) % items.length : 
+            (currentIndex + 1) % items.length;
+        
+        items[targetIndex].focus();
     }
 
     handleClick(e) {
         const clickedItem = e.currentTarget;
         
-        // If no item is selected, select this one
         if (!this.selectedItem) {
-            // Only allow selecting from left column
-            if (clickedItem.closest('.matching-prompts')) {
-                this.selectedItem = clickedItem;
-                clickedItem.classList.add('selected');
+            if (clickedItem.closest('.left-items')) {
+                this.selectItem(clickedItem);
             }
             return;
         }
         
-        // If clicking the same item, deselect it
         if (this.selectedItem === clickedItem) {
-            this.selectedItem.classList.remove('selected');
-            this.selectedItem = null;
+            this.deselectItem();
             return;
         }
         
-        // If clicking an item in the right column when we have a selection
-        if (clickedItem.closest('.matching-responses') && this.selectedItem) {
+        if (clickedItem.closest('.right-items')) {
             this.createMatch(this.selectedItem, clickedItem);
+            this.deselectItem();
+        }
+    }
+
+    selectItem(item) {
+        this.selectedItem = item;
+        item.classList.add('selected');
+        item.setAttribute('aria-selected', 'true');
+        this.feedbackRegion.textContent = `Selected left item ${item.dataset.index + 1}. Choose a matching item from the right.`;
+    }
+
+    deselectItem() {
+        if (this.selectedItem) {
             this.selectedItem.classList.remove('selected');
+            this.selectedItem.setAttribute('aria-selected', 'false');
             this.selectedItem = null;
+            this.feedbackRegion.textContent = 'Selection cleared.';
         }
     }
 
     createMatch(leftItem, rightItem) {
-        // Remove any existing matches for these items
-        this.removeMatch(leftItem);
-        this.removeMatch(rightItem);
+        this.removeExistingMatches(leftItem, rightItem);
         
-        // Create new match
-        const matchId = `match-${Date.now()}`;
-        this.matches.set(leftItem.dataset.pair, rightItem.dataset.pair);
+        const matchId = `${leftItem.dataset.pair}-${rightItem.dataset.pair}`;
+        this.state.matches.set(leftItem.dataset.pair, rightItem.dataset.pair);
         
-        // Create SVG line
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.classList.add('matching-line');
-        this.updateLinePosition(line, leftItem, rightItem);
-        this.svg.appendChild(line);
+        const line = this.createLine(leftItem, rightItem);
+        this.state.lines.set(leftItem.dataset.pair, line);
         
-        // Store line reference
-        this.lines.set(leftItem.dataset.pair, line);
-        
-        // Add visual feedback
         leftItem.classList.add('matched');
         rightItem.classList.add('matched');
+        leftItem.setAttribute('aria-label', `Left item ${parseInt(leftItem.dataset.index) + 1}, matched with right item ${parseInt(rightItem.dataset.index) + 1}`);
+        rightItem.setAttribute('aria-label', `Right item ${parseInt(rightItem.dataset.index) + 1}, matched with left item ${parseInt(leftItem.dataset.index) + 1}`);
+        
+        this.dispatchProgressEvent();
+        this.feedbackRegion.textContent = `Matched left item ${parseInt(leftItem.dataset.index) + 1} with right item ${parseInt(rightItem.dataset.index) + 1}`;
     }
 
-    removeMatch(item) {
-        const pair = item.dataset.pair;
-        if (this.lines.has(pair)) {
-            this.lines.get(pair).remove();
-            this.lines.delete(pair);
+    removeExistingMatches(leftItem, rightItem) {
+        // Remove any existing match for the left item
+        if (this.state.lines.has(leftItem.dataset.pair)) {
+            const line = this.state.lines.get(leftItem.dataset.pair);
+            line.remove();
+            this.state.lines.delete(leftItem.dataset.pair);
             
-            // Remove visual feedback
-            item.classList.remove('matched');
-            
-            // Find and remove matching item's visual feedback
-            const matchingPair = this.matches.get(pair);
-            if (matchingPair) {
-                const matchingItem = this.element.querySelector(`[data-pair="${matchingPair}"]`);
-                if (matchingItem) matchingItem.classList.remove('matched');
+            const oldMatch = this.state.matches.get(leftItem.dataset.pair);
+            const oldRightItem = this.element.querySelector(`[data-pair="${oldMatch}"]`);
+            if (oldRightItem) {
+                oldRightItem.classList.remove('matched', 'correct', 'incorrect');
+                oldRightItem.setAttribute('aria-label', `Right item ${parseInt(oldRightItem.dataset.index) + 1}`);
             }
-            
-            this.matches.delete(pair);
         }
+        
+        // Remove any existing match for the right item
+        Array.from(this.state.matches.entries()).forEach(([leftPair, rightPair]) => {
+            if (rightPair === rightItem.dataset.pair) {
+                const line = this.state.lines.get(leftPair);
+                if (line) line.remove();
+                this.state.lines.delete(leftPair);
+                
+                const oldLeftItem = this.element.querySelector(`[data-pair="${leftPair}"]`);
+                if (oldLeftItem) {
+                    oldLeftItem.classList.remove('matched', 'correct', 'incorrect');
+                    oldLeftItem.setAttribute('aria-label', `Left item ${parseInt(oldLeftItem.dataset.index) + 1}`);
+                }
+                
+                this.state.matches.delete(leftPair);
+            }
+        });
+    }
+
+    createLine(leftItem, rightItem) {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.classList.add('connection-line');
+        this.updateLinePosition(line, leftItem, rightItem);
+        this.svg.appendChild(line);
+        return line;
     }
 
     updateLinePosition(line, leftItem, rightItem) {
         const leftRect = leftItem.getBoundingClientRect();
         const rightRect = rightItem.getBoundingClientRect();
-        const containerRect = this.svg.getBoundingClientRect();
+        const svgRect = this.svg.getBoundingClientRect();
         
-        const x1 = leftRect.right - containerRect.left;
-        const y1 = leftRect.top - containerRect.top + leftRect.height/2;
-        const x2 = rightRect.left - containerRect.left;
-        const y2 = rightRect.top - containerRect.top + rightRect.height/2;
+        const x1 = leftRect.right - svgRect.left;
+        const y1 = leftRect.top - svgRect.top + leftRect.height/2;
+        const x2 = rightRect.left - svgRect.left;
+        const y2 = rightRect.top - svgRect.top + rightRect.height/2;
         
         line.setAttribute('x1', x1);
         line.setAttribute('y1', y1);
@@ -129,62 +228,102 @@ export default class MatchingTask extends BaseTask {
         line.setAttribute('y2', y2);
     }
 
+    updateAllLines() {
+        this.state.matches.forEach((rightPair, leftPair) => {
+            const leftItem = this.element.querySelector(`[data-pair="${leftPair}"]`);
+            const rightItem = this.element.querySelector(`[data-pair="${rightPair}"]`);
+            const line = this.state.lines.get(leftPair);
+            
+            if (leftItem && rightItem && line) {
+                this.updateLinePosition(line, leftItem, rightItem);
+            }
+        });
+    }
+
+    dispatchProgressEvent() {
+        const progress = this.calculateProgress();
+        document.dispatchEvent(new CustomEvent('taskProgress', {
+            detail: {
+                taskId: this.element.id,
+                progress
+            }
+        }));
+    }
+
+    calculateProgress() {
+        const totalPairs = this.element.querySelectorAll('.left-items .match-item').length;
+        return this.state.matches.size / totalPairs;
+    }
+
     async check() {
         let correct = 0;
         
-        this.matches.forEach((targetPair, sourcePair) => {
-            const isCorrect = sourcePair === targetPair;
+        this.state.matches.forEach((rightPair, leftPair) => {
+            const isCorrect = leftPair === rightPair;
             if (isCorrect) correct++;
             
-            // Find matching items
-            const sourceItem = this.element.querySelector(`[data-pair="${sourcePair}"]`);
-            const targetItem = this.element.querySelector(`[data-pair="${targetPair}"]`);
-            const line = this.lines.get(sourcePair);
+            const leftItem = this.element.querySelector(`[data-pair="${leftPair}"]`);
+            const rightItem = this.element.querySelector(`[data-pair="${rightPair}"]`);
+            const line = this.state.lines.get(leftPair);
             
-            if (sourceItem && targetItem && line) {
-                if (isCorrect) {
-                    sourceItem.classList.add('correct');
-                    targetItem.classList.add('correct');
-                    line.classList.add('correct');
-                } else {
-                    sourceItem.classList.add('incorrect');
-                    targetItem.classList.add('incorrect');
-                    line.classList.add('incorrect');
-                }
+            if (leftItem && rightItem && line) {
+                const state = isCorrect ? 'correct' : 'incorrect';
+                leftItem.classList.add(state);
+                rightItem.classList.add(state);
+                line.classList.add(state);
             }
         });
 
-        this.state.score = this.calculateScore(correct, this.matches.size);
+        const totalPairs = this.element.querySelectorAll('.left-items .match-item').length;
+        const score = this.calculateScore(correct, totalPairs);
+        
+        this.state.score = score;
         this.state.checked = true;
+        
+        this.feedbackRegion.textContent = `Check complete. ${correct} out of ${totalPairs} matches are correct.`;
 
         return {
-            correct: this.state.score === 1,
-            score: this.state.score,
+            correct: score === 1,
+            score,
             details: {
-                total: this.matches.size,
-                correct
+                total: totalPairs,
+                correct,
+                matched: this.state.matches.size
             }
         };
     }
 
     reset() {
         // Clear all matches and lines
-        this.matches.clear();
-        this.lines.forEach(line => line.remove());
-        this.lines.clear();
+        this.state.matches.clear();
+        this.state.lines.forEach(line => line.remove());
+        this.state.lines.clear();
         
         // Reset all items
-        this.element.querySelectorAll('.matching-item').forEach(item => {
+        this.element.querySelectorAll('.match-item').forEach(item => {
             item.classList.remove('matched', 'selected', 'correct', 'incorrect');
+            item.setAttribute('aria-selected', 'false');
+            const isLeftItem = item.closest('.left-items');
+            item.setAttribute('aria-label', 
+                `${isLeftItem ? 'Left' : 'Right'} item ${parseInt(item.dataset.index) + 1}`);
         });
         
         // Clear selection
-        if (this.selectedItem) {
-            this.selectedItem.classList.remove('selected');
-            this.selectedItem = null;
-        }
+        this.deselectItem();
         
-        this.state.checked = false;
         this.state.score = 0;
+        this.state.checked = false;
+        
+        this.feedbackRegion.textContent = 'Task reset. Ready to start matching.';
+        this.dispatchProgressEvent();
+    }
+
+    addErrorHandling() {
+        window.addEventListener('error', (event) => {
+            if (event.target === this.element || this.element.contains(event.target)) {
+                console.error('Matching task error:', event.error);
+                this.feedbackRegion.textContent = 'An error occurred. Please try again.';
+            }
+        });
     }
 }
