@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Worksheet | ESL Worksheets</title>
+    <!-- CSS Load Debug -->
+    <style>
+        /* Debug Styles */
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .debug-box {
+            outline: 2px dashed red;
+            position: relative;
+        }
+        .debug-box::before {
+            content: attr(data-debug);
+            position: absolute;
+            top: -20px;
+            left: 0;
+            background: red;
+            color: white;
+            padding: 2px 5px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        .debug-css {
+            outline: 2px dashed blue;
+            position: relative;
+        }
+        .debug-css::after {
+            content: attr(data-css);
+            position: absolute;
+            bottom: -20px;
+            right: 0;
+            background: blue;
+            color: white;
+            padding: 2px 5px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+    </style>
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="../../assets/css/layout.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/tasks/base-task.css">
+    <!-- Task CSS -->
+    <link rel="stylesheet" href="../../assets/css/tasks/multiChoice.css">
+    <link rel="stylesheet" href="../../assets/css/tasks/fillBlanks.css">
+    <link rel="stylesheet" href="../../assets/css/tasks/matching.css">
+    <link rel="stylesheet" href="../../assets/css/tasks/dictation.css">
+</head>
+<body>
+    <!-- CSS Variables Debug Display -->
+    <div class="debug-info" id="cssVarsDebug">Loading CSS variables...</div>
+    
+    <!-- Standard Navigation -->
+    <nav class="worksheet-nav debug-box" data-debug="nav:worksheet-nav" role="navigation" aria-label="Worksheet navigation">
+        <div class="nav-container debug-box" data-debug="div:nav-container">
+            <a href="../../index.html" class="nav-home btn btn-outline debug-css" data-css="btn, btn-outline" aria-label="Back to worksheets hub">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Back to Worksheets</span>
+            </a>
+
+            <div class="nav-progress debug-box" data-debug="div:nav-progress" role="progressbar" aria-label="Worksheet progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress debug-css" data-css="progress">
+                    <div class="progress-bar debug-css" data-css="progress-bar" style="width: 0%"></div>
+                </div>
+                <span class="progress-text debug-css" data-css="progress-text">0% Complete</span>
+            </div>
+
+            <div class="nav-level debug-box" data-debug="div:nav-level">
+                <span class="level-label debug-css" data-css="level-label">Level:</span>
+                <span class="level-value debug-css" data-css="level-value">Debug</span>
+            </div>
+
+            <div class="voice-control debug-box" data-debug="div:voice-control">
+                <label for="globalVoice" class="voice-label debug-css" data-css="voice-label">Voice:</label>
+                <select id="globalVoice" class="voice-select debug-css" data-css="voice-select" aria-label="Select voice for audio playback"></select>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content" class="worksheet debug-box" data-debug="main:worksheet" role="main">
+        <!-- Multiple Choice Task Debug -->
+        <section class="task-container debug-box" data-debug="section:task-container[multiChoice]" data-task-type="multiChoice">
+            <h2 class="task-title debug-css" data-css="task-title">Multiple Choice Debug</h2>
+            <div class="task-instructions debug-css" data-css="task-instructions">Choose the correct answer to test styling.</div>
+
+            <div class="task-content debug-box" data-debug="div:task-content">
+                <div class="task-item debug-box" data-debug="div:task-item" data-index="1">
+                    <p class="question-text debug-css" data-css="question-text">What type of class is 'debug-box'?</p>
+                    <div class="options debug-box" data-debug="div:options">
+                        <label class="option debug-css" data-css="option">
+                            <input type="radio" name="q1" value="1">
+                            <span class="option-text">Regular class</span>
+                        </label>
+                        <label class="option debug-css" data-css="option">
+                            <input type="radio" name="q1" value="2" data-correct="true">
+                            <span class="option-text">Debug class</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fill in the Blanks Task Debug -->
+        <section class="task-container debug-box" data-debug="section:task-container[fillBlanks]" data-task-type="fillBlanks">
+            <h2 class="task-title debug-css" data-css="task-title">Fill in the Blanks Debug</h2>
+            <div class="task-instructions debug-css" data-css="task-instructions">Complete the sentence to test input styling.</div>
+
+            <div class="task-content debug-box" data-debug="div:task-content">
+                <div class="task-item debug-box" data-debug="div:task-item">
+                    <div class="sentence debug-css" data-css="sentence">
+                        <span class="sentence-text debug-css" data-css="sentence-text">This is a </span>
+                        <input type="text" 
+                               class="blank-input debug-css" 
+                               data-css="blank-input"
+                               data-correct="debug" 
+                               data-index="1"
+                               aria-label="Fill in: This is a ___ test"
+                               autocomplete="off"
+                               spellcheck="false">
+                        <span class="sentence-text debug-css" data-css="sentence-text"> test.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Matching Task Debug -->
+        <section class="task-container debug-box" data-debug="section:task-container[matching]" data-task-type="matching">
+            <h2 class="task-title debug-css" data-css="task-title">Matching Debug</h2>
+            <div class="task-instructions debug-css" data-css="task-instructions">Match items to test connection styling.</div>
+
+            <div class="task-content debug-box" data-debug="div:task-content">
+                <div class="pairs-container debug-box" data-debug="div:pairs-container">
+                    <div class="left-items debug-box" data-debug="div:left-items">
+                        <div class="task-item debug-css" data-css="task-item" data-pair="debug">Debug</div>
+                        <div class="task-item debug-css" data-css="task-item" data-pair="test">Test</div>
+                    </div>
+                    <div class="right-items debug-box" data-debug="div:right-items">
+                        <div class="task-item debug-css" data-css="task-item" data-pair="test">Testing</div>
+                        <div class="task-item debug-css" data-css="task-item" data-pair="debug">Debugging</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dictation Task Debug -->
+        <section class="task-container debug-box" data-debug="section:task-container[dictation]" data-task-type="dictation">
+            <h2 class="task-title debug-css" data-css="task-title">Dictation Debug</h2>
+            <div class="task-instructions debug-css" data-css="task-instructions">Type what you hear to test audio controls.</div>
+
+            <div class="task-content debug-box" data-debug="div:task-content">
+                <div class="dictation-task debug-box" data-debug="div:dictation-task" 
+                     data-text="This is a debug test." 
+                     data-max-attempts="3">
+                    <div class="dictation-controls debug-box" data-debug="div:dictation-controls">
+                        <div class="play-control debug-css" data-css="play-control">
+                            <button type="button" class="play-button debug-css" data-css="play-button">Play</button>
+                            <span class="attempts debug-css" data-css="attempts">Plays left: 3</span>
+                        </div>
+                        <div class="speed-control debug-css" data-css="speed-control">
+                            <button type="button" class="speed-button debug-css" data-css="speed-button" data-speed="0.75">0.75x</button>
+                            <button type="button" class="speed-button active debug-css" data-css="speed-button active" data-speed="1">1x</button>
+                        </div>
+                    </div>
+                    <textarea class="dictation-input debug-css" 
+                              data-css="dictation-input"
+                              rows="3"
+                              placeholder="Type what you hear..."
+                              aria-label="Dictation input"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <footer class="worksheet-footer debug-box" data-debug="footer:worksheet-footer">
+            <div class="button-group debug-box" data-debug="div:button-group">
+                <button type="button" id="check" class="btn btn-primary debug-css" data-css="btn btn-primary">Check Answers</button>
+                <button type="button" id="retry" class="btn btn-secondary debug-css" data-css="btn btn-secondary">Try Again</button>
+            </div>
+            <div aria-live="polite" class="feedback-region visually-hidden"></div>
+        </footer>
+    </main>
+
+    <script>
+    // Debug Script to display CSS variables
+    window.addEventListener('DOMContentLoaded', () => {
+        const debugInfo = document.getElementById('cssVarsDebug');
+        const styles = getComputedStyle(document.documentElement);
+        const cssVars = {};
+
+        // Collect all CSS variables
+        for (let i = 0; i < styles.length; i++) {
+            const prop = styles[i];
+            if (prop.startsWith('--')) {
+                cssVars[prop] = styles.getPropertyValue(prop);
+            }
+        }
+
+        // Display CSS variables
+        debugInfo.textContent = 'CSS Variables:\n' + 
+            JSON.stringify(cssVars, null, 2);
+
+        // Add computed style info to debug-css elements
+        document.querySelectorAll('.debug-css').forEach(el => {
+            const styles = window.getComputedStyle(el);
+            const important = [
+                'color', 'background-color', 'border', 'margin', 
+                'padding', 'font-size', 'font-family'
+            ];
+            const computedStyles = {};
+            important.forEach(prop => {
+                computedStyles[prop] = styles.getPropertyValue(prop);
+            });
+            el.title = JSON.stringify(computedStyles, null, 2);
+        });
+    });
+    </script>
+
+    <script src="../../assets/js/worksheetManager.js" type="module"></script>
+</body>
+</html>

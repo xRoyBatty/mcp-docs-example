@@ -1,0 +1,17 @@
+{
+    "title": "Debug Worksheet",
+    "level": "Debug",
+    "category": "Development",
+    "tags": ["debug", "development", "testing"],
+    "description": "A worksheet designed to debug styling and functionality of all task types.",
+    "objectives": [
+        "Debug task container styling",
+        "Verify CSS variable inheritance",
+        "Test task component layouts",
+        "Validate interactive elements"
+    ],
+    "estimatedTime": "5 minutes",
+    "taskTypes": ["multiChoice", "fillBlanks", "matching", "dictation"],
+    "skillsFocus": ["development"],
+    "prerequisites": ["None"]
+}
