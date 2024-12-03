@@ -1,16 +1,53 @@
 <!-- Matching Task Template -->
-<section class="task matching" data-task-type="matching">
-    <h2>Matching Exercise</h2>
-    
-    <p class="task-instructions">Match the items on the left with their corresponding pairs on the right.</p>
-    
-    <div class="matching-container">
-        <div class="matching-prompts">
-            <div class="matching-item" data-index="1" data-pair="example1">Example left item</div>
+<section class="task matching" data-task-type="matching" aria-labelledby="{TASK_ID}-title">
+    <h2 id="{TASK_ID}-title" class="task-title">{TITLE}</h2>
+    <div class="task-instructions">{INSTRUCTIONS}</div>
+
+    <div class="pairs-container" role="application" aria-label="Matching pairs exercise">
+        <div class="left-items" role="group" aria-label="Left items to match">
+            <!-- Left Item Template (repeat for each item) -->
+            <div class="match-item" 
+                 data-index="{LEFT_INDEX}" 
+                 data-pair="{PAIR_ID}" 
+                 tabindex="0" 
+                 role="button"
+                 aria-label="Left item {LEFT_INDEX}: {LEFT_TEXT}"
+                 aria-selected="false">
+                {LEFT_TEXT}
+            </div>
+            <!-- End Left Item Template -->
         </div>
-        
-        <div class="matching-responses">
-            <div class="matching-item" data-index="2" data-pair="example1">Example right item</div>
+
+        <div class="right-items" role="group" aria-label="Right items to match">
+            <!-- Right Item Template (repeat for each item) -->
+            <div class="match-item" 
+                 data-index="{RIGHT_INDEX}" 
+                 data-pair="{PAIR_ID}" 
+                 tabindex="0" 
+                 role="button"
+                 aria-label="Right item {RIGHT_INDEX}: {RIGHT_TEXT}"
+                 aria-selected="false">
+                {RIGHT_TEXT}
+            </div>
+            <!-- End Right Item Template -->
         </div>
     </div>
+
+    <!-- Help text for screen readers -->
+    <div class="help-text visually-hidden">
+        To make a match: First select an item from the left column using Enter or Space, 
+        then select its matching pair from the right column. Use arrow keys to navigate 
+        between items.
+    </div>
 </section>
+
+<!-- Template Variables:
+{TASK_ID} - Unique identifier for the task
+{TITLE} - Task title
+{INSTRUCTIONS} - Task instructions
+{LEFT_INDEX} - Index for left item (1-based)
+{RIGHT_INDEX} - Index for right item (1-based)
+{PAIR_ID} - Unique identifier for matching pair
+{LEFT_TEXT} - Text for left item
+{RIGHT_TEXT} - Text for right item
+-->
