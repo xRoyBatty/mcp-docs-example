@@ -11,7 +11,7 @@
         "Write weather descriptions from dictation"
     ],
     "estimatedTime": "20 minutes",
-    "taskTypes": ["multipleChoice", "fillBlanks", "matching", "dictation"],
-    "skillsFocus": ["listening", "writing", "vocabulary"],
-    "prerequisites": ["Basic weather vocabulary", "Basic sentence structure"]
+    "taskTypes": ["multiChoice", "fillBlanks", "matching", "dictation"],
+    "skillsFocus": ["listening", "vocabulary"],
+    "prerequisites": ["Basic weather vocabulary"]
 }
