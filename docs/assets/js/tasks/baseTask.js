@@ -8,8 +8,20 @@ export default class BaseTask {
             score: 0
         };
         
+        // Initialize voice synthesis
+        this.synthesis = window.speechSynthesis;
+        this.voices = [];
+        this.allowedVoices = [
+            'Microsoft Ryan Online (Natural) - English (United Kingdom)',
+            'Microsoft Sonia Online (Natural) - English (United Kingdom)',
+            'Microsoft AvaMultilingual Online (Natural) - English (United States)',
+            'Microsoft AndrewMultilingual Online (Natural) - English (United States)'
+        ];
+        
         // Load task-specific styles
         this.loadStyles();
+        // Set up voice support
+        this.setupVoiceSupport();
     }
 
     async loadStyles() {
@@ -25,6 +37,47 @@ export default class BaseTask {
         } catch (error) {
             console.error(`Failed to load styles for task type: ${this.type}`, error);
         }
+    }
+
+    setupVoiceSupport() {
+        // Find instruction element
+        const instructions = this.element.querySelector('.task-instructions');
+        if (!instructions) return;
+
+        // Create speak button
+        const speakButton = document.createElement('button');
+        speakButton.className = 'speak-button';
+        speakButton.innerHTML = '<span>🔊</span>';
+        speakButton.title = 'Read instructions';
+        
+        // Add click handler
+        speakButton.addEventListener('click', () => this.speakText(instructions.textContent));
+        
+        // Insert button after instructions
+        instructions.parentNode.insertBefore(speakButton, instructions.nextSibling);
+
+        // Initialize voices
+        if ('speechSynthesis' in window) {
+            this.loadVoices();
+            this.synthesis.addEventListener('voiceschanged', () => this.loadVoices());
+        }
+    }
+
+    loadVoices() {
+        this.voices = this.synthesis.getVoices();
+        this.selectedVoice = this.voices.find(voice => 
+            this.allowedVoices.includes(voice.name)
+        ) || this.voices[0];
+    }
+
+    speakText(text) {
+        if (!text || this.synthesis.speaking) return;
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        if (this.selectedVoice) {
+            utterance.voice = this.selectedVoice;
+        }
+        this.synthesis.speak(utterance);
     }
 
     // Abstract methods that must be implemented by task classes
