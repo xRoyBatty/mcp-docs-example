@@ -1,0 +1,20 @@
+{
+    "title": "[Worksheet Title]",
+    "level": "[Level]",
+    "category": "[Category]",
+    "tags": ["tag1", "tag2"],
+    "description": "[Description]",
+    "objectives": [
+        "[Objective 1]",
+        "[Objective 2]"
+    ],
+    "estimatedTime": "[Time] minutes",
+    "taskTypes": [
+        "multiChoice",
+        "fillBlanks",
+        "matching",
+        "dictation"
+    ],
+    "skillsFocus": ["skill1", "skill2"],
+    "prerequisites": ["[Prerequisite 1]"],
+}

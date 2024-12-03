@@ -3,151 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Worksheet Title | ESL Worksheets</title>
-    <link rel="stylesheet" href="../../assets/css/base.css">
-    <link rel="stylesheet" href="../../assets/css/layout.css">
-    <link rel="stylesheet" href="../../assets/css/components.css">
-    <link rel="stylesheet" href="../../assets/css/tasks/base-task.css">
+    <title>[Worksheet Title] | ESL Worksheets</title>
+    <!-- Only necessary CSS -->
+    <link rel="stylesheet" href="../../assets/css/worksheet.css">
+    <!-- Include only CSS for tasks you use -->
+    <link rel="stylesheet" href="../../assets/css/tasks/multiChoice.css">
+    <link rel="stylesheet" href="../../assets/css/tasks/fillBlanks.css">
+    <link rel="stylesheet" href="../../assets/css/tasks/matching.css">
+    <link rel="stylesheet" href="../../assets/css/tasks/dictation.css">
 </head>
 <body>
-    <!-- Skip link for accessibility -->
-    <a href="#main-content" class="visually-hidden focus-visible">Skip to main content</a>
-
-    <nav class="worksheet-nav" role="navigation" aria-label="Worksheet navigation">
-        <div class="nav-container">
-            <a href="../../index.html" class="nav-home btn btn-outline" aria-label="Back to worksheets hub">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
-                <span>Back to Worksheets</span>
-            </a>
-
-            <div class="nav-progress" role="progressbar" aria-label="Worksheet progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress">
-                    <div class="progress-bar" style="width: 0%"></div>
-                </div>
-                <span class="progress-text">0% Complete</span>
-            </div>
-
-            <div class="nav-level">
-                <span class="level-label">Level:</span>
-                <span class="level-value">B1</span>
-            </div>
-
-            <!-- Global voice selector -->
-            <div class="voice-control">
-                <label for="globalVoice" class="voice-label">Voice:</label>
-                <select id="globalVoice" class="voice-select" aria-label="Select voice for audio playback"></select>
-            </div>
+    <nav class="nav">
+        <a href="../../index.html" class="back-btn">Back to Worksheets</a>
+        <div class="progress">
+            <div class="progress-bar"></div>
+            <span class="progress-text">0% Complete</span>
+        </div>
+        <div class="level">Level: [Level]</div>
+        <div class="voice">
+            <label>Voice:</label>
+            <select id="globalVoice"></select>
         </div>
     </nav>
 
-    <main id="main-content" class="worksheet" role="main">
-        <header class="worksheet-header">
-            <h1 class="worksheet-title">Sample Worksheet Title</h1>
-            
-            <div class="worksheet-meta">
-                <span class="meta-item">
-                    <span class="meta-label">Level:</span>
-                    <span class="meta-value">B1</span>
-                </span>
-                <span class="meta-item">
-                    <span class="meta-label">Time:</span>
-                    <span class="meta-value">20 minutes</span>
-                </span>
-                <span class="meta-item">
-                    <span class="meta-label">Skills:</span>
-                    <span class="meta-value">Grammar</span>
-                </span>
+    <main class="worksheet">
+        <header class="header">
+            <h1>[Worksheet Title]</h1>
+            <div class="meta">
+                <span>Level: [Level]</span>
+                <span>Time: [Time] minutes</span>
+                <span>Skills: [Skills]</span>
             </div>
         </header>
 
-        <div class="worksheet-content">
-            <section class="instructions" aria-labelledby="instructions-title">
-                <h2 id="instructions-title">Instructions</h2>
-                <div class="task-instructions" data-audio="instructions">
-                    Example instructions for this worksheet. Explain what students need to do.
-                </div>
-            </section>
-
-            <!-- Example Multiple Choice Task -->
-            <section class="task multiple-choice" data-task-type="multiChoice" aria-labelledby="mc-title">
-                <h2 id="mc-title">Multiple Choice</h2>
-                <div class="task-instructions">Choose the correct answer for each question.</div>
-
-                <div class="questions-container">
-                    <div class="question" data-index="1" role="group" aria-labelledby="q1-text">
-                        <p id="q1-text" class="question-text">Sample question?</p>
-                        <div class="options" role="radiogroup" aria-labelledby="q1-text">
-                            <label class="option">
-                                <input type="radio" name="q1" value="1" aria-labelledby="q1-opt1">
-                                <span id="q1-opt1" class="option-text">Option A</span>
+        <div class="tasks">
+            <!-- Multiple Choice Template -->
+            <section class="task multiple-choice">
+                <h2>[Task Title]</h2>
+                <p class="instructions">[Instructions]</p>
+                
+                <div class="content">
+                    <div class="question">
+                        <p>[Question Text]</p>
+                        <div class="options">
+                            <label>
+                                <input type="radio" name="q1" value="1">
+                                <span>[Option 1]</span>
                             </label>
-                            <label class="option">
-                                <input type="radio" name="q1" value="2" data-correct="true" aria-labelledby="q1-opt2">
-                                <span id="q1-opt2" class="option-text">Option B</span>
+                            <label>
+                                <input type="radio" name="q1" value="2" data-correct="true">
+                                <span>[Option 2]</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="q1" value="3">
+                                <span>[Option 3]</span>
                             </label>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Example Fill in the Blanks Task -->
-            <section class="task fill-blanks" data-task-type="fillBlanks" aria-labelledby="fb-title">
-                <h2 id="fb-title">Fill in the Blanks</h2>
-                <div class="task-instructions">Complete the sentences with the correct words.</div>
+            <!-- Fill in the Blanks Template -->
+            <section class="task fill-blanks">
+                <h2>[Task Title]</h2>
+                <p class="instructions">[Instructions]</p>
+                
+                <div class="content">
+                    <p>
+                        [Text before] 
+                        <input type="text" data-correct="[answer]" data-index="1">
+                        [Text after]
+                    </p>
+                </div>
+            </section>
 
-                <div class="task-content">
-                    <div class="sentence">
-                        <input type="text" class="blank-input" 
-                               data-correct="rises" 
-                               data-index="1"
-                               aria-label="Fill in the blank: The sun ___ in the east."
-                               autocomplete="off"
-                               spellcheck="false">
-                        <span class="sentence-text">in the east.</span>
+            <!-- Matching Template -->
+            <section class="task matching">
+                <h2>[Task Title]</h2>
+                <p class="instructions">[Instructions]</p>
+                
+                <div class="content">
+                    <div class="pairs">
+                        <div class="left">
+                            <div class="item" data-pair="a">[Left Item 1]</div>
+                            <div class="item" data-pair="b">[Left Item 2]</div>
+                        </div>
+                        <div class="right">
+                            <div class="item" data-pair="b">[Right Item 2]</div>
+                            <div class="item" data-pair="a">[Right Item 1]</div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Example Matching Task -->
-            <section class="task matching" data-task-type="matching" aria-labelledby="match-title">
-                <h2 id="match-title">Matching Exercise</h2>
-                <div class="task-instructions">Click an item on the left, then click its matching pair on the right.</div>
-
-                <div class="pairs-container" role="application" aria-label="Matching pairs exercise">
-                    <div class="left-items" role="group" aria-label="Left items">
-                        <div class="match-item" data-pair="a" tabindex="0" role="button">
-                            First item
+            <!-- Dictation Template -->
+            <section class="task dictation">
+                <h2>[Task Title]</h2>
+                <p class="instructions">[Instructions]</p>
+                
+                <div class="content">
+                    <div class="controls">
+                        <button class="play-btn">Play</button>
+                        <div class="speed-controls">
+                            <button class="speed-btn" data-speed="0.75">0.75x</button>
+                            <button class="speed-btn active" data-speed="1">1x</button>
                         </div>
-                        <div class="match-item" data-pair="b" tabindex="0" role="button">
-                            Second item
-                        </div>
+                        <span class="attempts">Plays left: 3</span>
                     </div>
-                    <div class="right-items" role="group" aria-label="Right items">
-                        <div class="match-item" data-pair="b" tabindex="0" role="button">
-                            Matches second
-                        </div>
-                        <div class="match-item" data-pair="a" tabindex="0" role="button">
-                            Matches first
-                        </div>
-                    </div>
+                    <textarea data-text="[Dictation Text]" data-max-attempts="3"
+                              placeholder="Type what you hear..."></textarea>
                 </div>
             </section>
         </div>
 
-        <footer class="worksheet-footer">
-            <div class="button-group">
-                <button type="button" id="check" class="btn btn-primary">
-                    Check Answers
-                </button>
-                <button type="button" id="retry" class="btn btn-secondary">
-                    Try Again
-                </button>
-            </div>
-            <!-- Add a live region for task feedback -->
-            <div aria-live="polite" class="feedback-region visually-hidden"></div>
+        <footer class="footer">
+            <button type="button" id="check">Check Answers</button>
+            <button type="button" id="retry">Try Again</button>
         </footer>
     </main>
 
