@@ -9,22 +9,10 @@ export default class DictationTask extends BaseTask {
         this.maxAttempts = parseInt(element.dataset.maxAttempts) || 3;
         this.selectedVoice = null;
         this.isPlaying = false;
-
-        // Initialize voice synthesis
-        this.synthesis = window.speechSynthesis;
-        this.voices = [];
-        this.allowedVoices = [
-            'Microsoft Ryan Online (Natural) - English (United Kingdom)',
-            'Microsoft Sonia Online (Natural) - English (United Kingdom)',
-            'Microsoft AvaMultilingual Online (Natural) - English (United States)',
-            'Microsoft AndrewMultilingual Online (Natural) - English (United States)'
-        ];
-
-        this.init();
     }
 
     async init() {
-        await super.init();
+        await super.loadStyles();
         this.createElements();
         this.setupEventListeners();
         this.loadVoices();
@@ -37,10 +25,6 @@ export default class DictationTask extends BaseTask {
         // Create controls container
         this.controls = document.createElement('div');
         this.controls.className = 'dictation-controls';
-
-        // Create voice selection dropdown
-        this.voiceSelect = document.createElement('select');
-        this.voiceSelect.className = 'voice-select';
 
         // Create play button
         this.playButton = document.createElement('button');
@@ -67,7 +51,6 @@ export default class DictationTask extends BaseTask {
         this.helpText.textContent = `Attempts remaining: ${this.maxAttempts}`;
 
         // Assemble elements
-        this.controls.appendChild(this.voiceSelect);
         this.controls.appendChild(this.playButton);
         this.controls.appendChild(this.speakingIndicator);
         
@@ -82,30 +65,6 @@ export default class DictationTask extends BaseTask {
     setupEventListeners() {
         this.playButton.addEventListener('click', () => this.playDictation());
         this.input.addEventListener('input', () => this.validateInput());
-        
-        if ('speechSynthesis' in window) {
-            this.synthesis.addEventListener('voiceschanged', () => this.loadVoices());
-        }
-    }
-
-    loadVoices() {
-        this.voices = this.synthesis.getVoices();
-        const filteredVoices = this.voices.filter(voice => 
-            this.allowedVoices.includes(voice.name));
-
-        this.voiceSelect.innerHTML = '';
-        
-        filteredVoices.forEach((voice, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.textContent = voice.name;
-            this.voiceSelect.appendChild(option);
-        });
-
-        if (filteredVoices.length > 0) {
-            this.playButton.disabled = false;
-            this.selectedVoice = filteredVoices[0];
-        }
     }
 
     async playDictation() {
@@ -118,13 +77,7 @@ export default class DictationTask extends BaseTask {
         }
 
         const utterance = new SpeechSynthesisUtterance(this.correctText);
-        const selectedIndex = this.voiceSelect.value;
-        const filteredVoices = this.voices.filter(voice => 
-            this.allowedVoices.includes(voice.name));
-
-        if (filteredVoices[selectedIndex]) {
-            utterance.voice = filteredVoices[selectedIndex];
-        }
+        utterance.voice = this.getSelectedVoice();
 
         utterance.onstart = () => {
             this.isPlaying = true;
@@ -186,5 +139,11 @@ export default class DictationTask extends BaseTask {
         this.feedback.className = 'dictation-feedback';
         this.feedback.textContent = '';
         this.helpText.textContent = `Attempts remaining: ${this.maxAttempts}`;
+        if (this.isPlaying) {
+            this.synthesis.cancel();
+            this.isPlaying = false;
+            this.speakingIndicator.classList.remove('active');
+            this.playButton.querySelector('span').textContent = 'Play Dictation';
+        }
     }
 }
