@@ -1,147 +1,54 @@
-/* Multiple choice task styles */
-@import 'base-task.css';
+/* Multiple Choice Specific Styles */
+.multiple-choice .question {
+    margin-bottom: 2rem;
+}
 
-.multi-choice .questions-container {
+.multiple-choice .question p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.multiple-choice .options {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-lg);
+    gap: 1rem;
 }
 
-/* Question styling */
-.multi-choice .question {
-    composes: task-item;
-    animation: slideIn var(--transition-base);
-}
-
-.multi-choice .question-text {
-    font-weight: 500;
-    margin-bottom: var(--spacing-md);
-    color: var(--task-text);
-}
-
-/* Options container */
-.multi-choice .options {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-}
-
-/* Option styling */
-.multi-choice .option {
+.multiple-choice .options label {
     display: flex;
     align-items: center;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 2px solid var(--task-border-color);
-    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
     cursor: pointer;
-    transition: all var(--transition-base);
-    position: relative;
-    background: var(--task-background);
+    transition: all 0.2s ease;
 }
 
-/* Radio input styling */
-.multi-choice input[type="radio"] {
-    margin-right: var(--spacing-md);
-    width: 1.25rem;
-    height: 1.25rem;
-    cursor: pointer;
+.multiple-choice .options label:hover {
+    background: #f8f9fa;
 }
 
-/* Option prefix */
-.multi-choice .option-prefix {
-    font-weight: 500;
-    color: var(--task-text-light);
-    margin-right: var(--spacing-sm);
+.multiple-choice .options input[type="radio"] {
+    margin-right: 1rem;
 }
 
-/* Option states */
-.multi-choice .option:hover {
-    border-color: var(--color-primary);
-    background-color: rgba(0, 123, 255, 0.05);
+/* States */
+.multiple-choice .options label.correct {
+    border-color: #28a745;
+    background: #d4edda;
 }
 
-.multi-choice .option.selected {
-    border-color: var(--color-primary);
-    background-color: rgba(0, 123, 255, 0.1);
+.multiple-choice .options label.incorrect {
+    border-color: #dc3545;
+    background: #f8d7da;
 }
 
-.multi-choice .option.correct {
-    border-color: var(--color-success);
-    background-color: rgba(40, 167, 69, 0.1);
+/* Animation */
+.multiple-choice .options label {
+    transform: translateX(0);
+    transition: transform 0.2s ease;
 }
 
-.multi-choice .option.incorrect {
-    border-color: var(--color-danger);
-    background-color: rgba(220, 53, 69, 0.1);
-}
-
-.multi-choice .option.dimmed {
-    opacity: 0.7;
-}
-
-/* Animation for state changes */
-.multi-choice .option {
-    transform-origin: center left;
-    animation: slideIn var(--transition-base);
-}
-
-/* Custom radio input styling */
-.multi-choice .radio-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.multi-choice .radio-input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.multi-choice .radio-custom {
-    width: 1.25rem;
-    height: 1.25rem;
-    border: 2px solid var(--task-border-color);
-    border-radius: 50%;
-    margin-right: var(--spacing-md);
-    position: relative;
-    transition: all var(--transition-base);
-}
-
-.multi-choice .radio-input:checked + .radio-custom {
-    border-color: var(--color-primary);
-}
-
-.multi-choice .radio-input:checked + .radio-custom::after {
-    content: '';
-    position: absolute;
-    width: 0.75rem;
-    height: 0.75rem;
-    background: var(--color-primary);
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    .multi-choice .question {
-        padding: var(--spacing-md);
-    }
-
-    .multi-choice .option {
-        padding: var(--spacing-sm);
-    }
-
-    .multi-choice .radio-custom {
-        width: 1rem;
-        height: 1rem;
-        margin-right: var(--spacing-sm);
-    }
-
-    .multi-choice .radio-input:checked + .radio-custom::after {
-        width: 0.5rem;
-        height: 0.5rem;
-    }
+.multiple-choice .options label:hover {
+    transform: translateX(5px);
 }

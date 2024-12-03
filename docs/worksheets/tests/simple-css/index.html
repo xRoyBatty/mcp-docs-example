@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple CSS Test | ESL Worksheets</title>
+    <link rel="stylesheet" href="../../../assets/css/worksheet.css">
+    <link rel="stylesheet" href="../../../assets/css/tasks/multiChoice.css">
+</head>
+<body>
+    <nav class="nav">
+        <a href="../../../index.html" class="back-btn">
+            Back to Worksheets
+        </a>
+        <div class="progress">
+            <div class="progress-bar"></div>
+            <span class="progress-text">0% Complete</span>
+        </div>
+        <div class="level">Level: B1</div>
+        <div class="voice">
+            <label>Voice:</label>
+            <select id="globalVoice"></select>
+        </div>
+    </nav>
+
+    <main class="worksheet">
+        <header class="header">
+            <h1>Simple CSS Test</h1>
+            <div class="meta">
+                <span>Level: B1</span>
+                <span>Time: 10 minutes</span>
+                <span>Skills: Grammar</span>
+            </div>
+        </header>
+
+        <div class="tasks">
+            <!-- Multiple Choice Task -->
+            <section class="task multiple-choice">
+                <h2>Multiple Choice</h2>
+                <p class="instructions">Choose the correct answer.</p>
+                
+                <div class="content">
+                    <div class="question">
+                        <p>The sky is ___.</p>
+                        <div class="options">
+                            <label>
+                                <input type="radio" name="q1" value="1">
+                                <span>red</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="q1" value="2" data-correct="true">
+                                <span>blue</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="q1" value="3">
+                                <span>green</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer class="footer">
+            <button type="button" id="check">Check Answers</button>
+            <button type="button" id="retry">Try Again</button>
+        </footer>
+    </main>
+
+    <script src="../../../assets/js/worksheetManager.js" type="module"></script>
+</body>
+</html>
