@@ -1,165 +1,104 @@
 import BaseTask from './baseTask.js';
 
-export default class DictationTask extends BaseTask {
+export default class Dictation extends BaseTask {
     constructor(element) {
         super(element);
-        this.type = 'dictation';
-        this.correctText = element.dataset.text || '';
-        this.attempts = 0;
-        this.maxAttempts = parseInt(element.dataset.maxAttempts) || 3;
-        this.selectedVoice = null;
-        this.isPlaying = false;
-        
-        // Initialize components
-        this.createElements();
-        this.setupEventListeners();
+        this.textarea = element.querySelector('textarea');
+        this.text = this.textarea?.dataset.text || '';
+        this.maxAttempts = parseInt(this.textarea?.dataset.maxAttempts || '3', 10);
+        this.attempts = this.maxAttempts;
+        this.currentSpeed = 1;
+
+        // Setup play button
+        this.playBtn = element.querySelector('.play-btn');
+        if (this.playBtn) {
+            this.playBtn.addEventListener('click', () => this.play());
+        }
+
+        // Setup speed buttons
+        element.querySelectorAll('.speed-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                element.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.currentSpeed = parseFloat(btn.dataset.speed);
+            });
+        });
+
+        // Update attempts display
+        this.updateAttempts();
     }
 
-    createElements() {
-        this.container = document.createElement('div');
-        this.container.className = 'dictation-container';
-        
-        // Create controls container
-        this.controls = document.createElement('div');
-        this.controls.className = 'dictation-controls';
+    updateAttempts() {
+        const attemptsDisplay = this.element.querySelector('.attempts');
+        if (attemptsDisplay) {
+            attemptsDisplay.textContent = `Plays left: ${this.attempts}`;
+        }
 
-        // Create play button
-        this.playButton = document.createElement('button');
-        this.playButton.className = 'dictation-button';
-        this.playButton.innerHTML = '<span>Play Dictation</span>';
-        this.playButton.disabled = true;
-
-        // Create speaking indicator
-        this.speakingIndicator = document.createElement('div');
-        this.speakingIndicator.className = 'speaking-indicator';
-
-        // Create input area
-        this.input = document.createElement('textarea');
-        this.input.className = 'dictation-input';
-        this.input.placeholder = 'Type the dictation here...';
-
-        // Create feedback area
-        this.feedback = document.createElement('div');
-        this.feedback.className = 'dictation-feedback';
-
-        // Create help text
-        this.helpText = document.createElement('div');
-        this.helpText.className = 'dictation-help';
-        this.helpText.textContent = `Attempts remaining: ${this.maxAttempts}`;
-
-        // Assemble elements
-        this.controls.appendChild(this.playButton);
-        this.controls.appendChild(this.speakingIndicator);
-        
-        this.container.appendChild(this.controls);
-        this.container.appendChild(this.input);
-        this.container.appendChild(this.feedback);
-        this.container.appendChild(this.helpText);
-
-        this.element.appendChild(this.container);
-    }
-
-    setupEventListeners() {
-        this.playButton.addEventListener('click', () => this.playDictation());
-        this.input.addEventListener('input', () => this.validateInput());
-        
-        // Initialize voices when they're available
-        if ('speechSynthesis' in window) {
-            this.loadVoices();
-            window.speechSynthesis.addEventListener('voiceschanged', () => this.loadVoices());
+        if (this.playBtn) {
+            if (this.attempts > 0) {
+                this.playBtn.removeAttribute('disabled');
+            } else {
+                this.playBtn.setAttribute('disabled', 'true');
+            }
         }
     }
 
-    loadVoices() {
-        const voices = window.speechSynthesis.getVoices();
-        const globalVoiceSelect = document.getElementById('globalVoice');
-        if (globalVoiceSelect) {
-            this.selectedVoice = voices.find(voice => 
-                voice.name === globalVoiceSelect.value
-            ) || voices[0];
-        } else {
-            this.selectedVoice = voices[0];
-        }
-        this.playButton.disabled = false;
-    }
+    play() {
+        if (this.attempts <= 0 || !this.text) return;
 
-    async playDictation() {
-        if (this.isPlaying) {
-            window.speechSynthesis.cancel();
-            this.isPlaying = false;
-            this.speakingIndicator.classList.remove('active');
-            this.playButton.querySelector('span').textContent = 'Play Dictation';
-            return;
-        }
-
-        const utterance = new SpeechSynthesisUtterance(this.correctText);
-        utterance.voice = this.selectedVoice;
-
-        utterance.onstart = () => {
-            this.isPlaying = true;
-            this.speakingIndicator.classList.add('active');
-            this.playButton.querySelector('span').textContent = 'Stop';
-        };
-
-        utterance.onend = () => {
-            this.isPlaying = false;
-            this.speakingIndicator.classList.remove('active');
-            this.playButton.querySelector('span').textContent = 'Play Dictation';
-        };
-
-        window.speechSynthesis.speak(utterance);
-    }
-
-    validateInput() {
-        const userInput = this.input.value.trim().toLowerCase();
-        const correctText = this.correctText.trim().toLowerCase();
+        // Create utterance
+        const utterance = new SpeechSynthesisUtterance(this.text);
         
-        if (userInput === correctText) {
-            this.showFeedback(true);
-            return true;
+        // Set voice from global selector
+        const selector = document.getElementById('globalVoice');
+        if (selector && selector.value) {
+            const voice = speechSynthesis.getVoices()
+                .find(v => v.name === selector.value);
+            if (voice) utterance.voice = voice;
         }
-        return false;
-    }
 
-    showFeedback(isCorrect) {
-        this.feedback.className = `dictation-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-        this.feedback.textContent = isCorrect ? 
-            'Perfect! Your dictation matches exactly!' : 
-            'Keep trying! The text doesn\'t match exactly.';
-        
-        if (!isCorrect) {
-            this.attempts++;
-            this.helpText.textContent = `Attempts remaining: ${this.maxAttempts - this.attempts}`;
-        }
+        // Set speed
+        utterance.rate = this.currentSpeed;
+
+        // Play audio
+        speechSynthesis.speak(utterance);
+
+        // Update attempts
+        this.attempts--;
+        this.updateAttempts();
     }
 
     async check() {
-        const isCorrect = this.validateInput();
-        if (!isCorrect && this.attempts >= this.maxAttempts) {
-            this.feedback.textContent = `Maximum attempts reached. The correct text was: ${this.correctText}`;
+        if (!this.textarea || !this.text) return { correct: 0, total: 1 };
+
+        const userText = this.textarea.value.trim().toLowerCase();
+        const correctText = this.text.toLowerCase();
+
+        // Calculate similarity
+        const isCorrect = userText === correctText;
+        const isPartial = !isCorrect && correctText.includes(userText);
+
+        // Show feedback
+        this.setState(this.textarea, isCorrect ? 'correct' : isPartial ? 'partial' : 'incorrect');
+
+        // Show correct answer if wrong
+        if (!isCorrect) {
+            this.textarea.title = `Correct text: ${this.text}`;
         }
-        
+
         return {
-            correct: isCorrect,
-            details: {
-                correct: isCorrect ? 1 : 0,
-                total: 1,
-                attempts: this.attempts
-            }
+            correct: isCorrect ? 1 : 0,
+            total: 1
         };
     }
 
     reset() {
-        this.input.value = '';
-        this.attempts = 0;
-        this.feedback.className = 'dictation-feedback';
-        this.feedback.textContent = '';
-        this.helpText.textContent = `Attempts remaining: ${this.maxAttempts}`;
-        if (this.isPlaying) {
-            window.speechSynthesis.cancel();
-            this.isPlaying = false;
-            this.speakingIndicator.classList.remove('active');
-            this.playButton.querySelector('span').textContent = 'Play Dictation';
+        if (this.textarea) {
+            this.textarea.value = '';
+            this.textarea.title = '';
+            this.setState(this.textarea, '');
         }
+        this.attempts = this.maxAttempts;
+        this.updateAttempts();
     }
 }
