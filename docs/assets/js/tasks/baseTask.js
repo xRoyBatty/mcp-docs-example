@@ -40,43 +40,78 @@ export default class BaseTask {
     }
 
     setupVoiceSupport() {
-        // Find instruction element
-        const instructions = this.element.querySelector('.task-instructions');
-        if (!instructions) return;
+        // Initialize global voice selector if not exists
+        this.initGlobalVoiceSelector();
 
-        // Create speak button
-        const speakButton = document.createElement('button');
-        speakButton.className = 'speak-button';
-        speakButton.innerHTML = '<span>🔊</span>';
-        speakButton.title = 'Read instructions';
-        
-        // Add click handler
-        speakButton.addEventListener('click', () => this.speakText(instructions.textContent));
-        
-        // Insert button after instructions
-        instructions.parentNode.insertBefore(speakButton, instructions.nextSibling);
+        // Find instruction elements
+        const instructions = this.element.querySelectorAll('.task-instructions, .task-content');
+        instructions.forEach(instruction => {
+            // Create speak button
+            const speakButton = document.createElement('button');
+            speakButton.className = 'speak-button';
+            speakButton.innerHTML = '<span>🔊</span>';
+            speakButton.title = 'Read aloud';
+            
+            // Add click handler
+            speakButton.addEventListener('click', () => this.speakText(instruction.textContent));
+            
+            // Insert button after instruction
+            instruction.parentNode.insertBefore(speakButton, instruction.nextSibling);
+        });
+    }
+
+    initGlobalVoiceSelector() {
+        const selector = document.getElementById('globalVoice');
+        if (!selector || selector.children.length > 0) return;
 
         // Initialize voices
         if ('speechSynthesis' in window) {
-            this.loadVoices();
-            this.synthesis.addEventListener('voiceschanged', () => this.loadVoices());
+            const loadVoices = () => {
+                this.voices = this.synthesis.getVoices();
+                const filteredVoices = this.voices.filter(voice => 
+                    this.allowedVoices.includes(voice.name));
+
+                selector.innerHTML = '';
+                
+                filteredVoices.forEach((voice, index) => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = voice.name;
+                    selector.appendChild(option);
+                });
+
+                // Set default voice
+                if (filteredVoices.length > 0) {
+                    selector.value = filteredVoices[0].name;
+                }
+            };
+
+            loadVoices();
+            this.synthesis.addEventListener('voiceschanged', loadVoices);
         }
     }
 
-    loadVoices() {
-        this.voices = this.synthesis.getVoices();
-        this.selectedVoice = this.voices.find(voice => 
-            this.allowedVoices.includes(voice.name)
-        ) || this.voices[0];
+    getSelectedVoice() {
+        const selector = document.getElementById('globalVoice');
+        if (selector) {
+            const selectedVoiceName = selector.value;
+            return this.synthesis.getVoices().find(voice => 
+                voice.name === selectedVoiceName
+            );
+        }
+        return null;
     }
 
     speakText(text) {
         if (!text || this.synthesis.speaking) return;
 
         const utterance = new SpeechSynthesisUtterance(text);
-        if (this.selectedVoice) {
-            utterance.voice = this.selectedVoice;
+        const selectedVoice = this.getSelectedVoice();
+        
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
         }
+
         this.synthesis.speak(utterance);
     }
 
