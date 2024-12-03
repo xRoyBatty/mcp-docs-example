@@ -3,65 +3,83 @@ import BaseTask from './baseTask.js';
 export default class FillBlanksTask extends BaseTask {
     constructor(element) {
         super(element);
-        this.blanks = Array.from(element.querySelectorAll('.blank'));
+        this.blanks = Array.from(element.querySelectorAll('.blank-input'));
+        this.state = {
+            ...this.state,
+            answers: new Map(),
+            feedback: new Map()
+        };
+        
+        this.initializeTask();
+    }
+
+    initializeTask() {
         this.addNumbers();
         this.setupInteractions();
+        this.handleAriaLabels();
+        this.addErrorHandling();
+    }
+
+    handleAriaLabels() {
+        this.element.setAttribute('role', 'form');
+        this.element.setAttribute('aria-label', 'Fill in the blanks task');
+        
+        // Add aria-live region for feedback
+        const feedbackRegion = document.createElement('div');
+        feedbackRegion.setAttribute('aria-live', 'polite');
+        feedbackRegion.className = 'visually-hidden feedback-region';
+        this.element.appendChild(feedbackRegion);
+        this.feedbackRegion = feedbackRegion;
     }
 
     addNumbers() {
-        // Add numbers to sentences if they don't already have them
-        this.element.querySelectorAll('.task-content > p').forEach((sentence, index) => {
-            if (!sentence.textContent.trim().startsWith(`${index + 1}.`)) {
-                sentence.textContent = `${index + 1}. ${sentence.textContent.trim()}`;
-            }
+        this.element.querySelectorAll('.sentence').forEach((sentence, index) => {
+            const number = document.createElement('span');
+            number.className = 'sentence-number';
+            number.textContent = `${index + 1}.`;
+            number.setAttribute('aria-hidden', 'true');
+            sentence.prepend(number);
         });
     }
 
     setupInteractions() {
-        this.blanks.forEach(blank => {
-            // Set initial attributes
+        this.blanks.forEach((blank, index) => {
             blank.setAttribute('autocomplete', 'off');
             blank.setAttribute('spellcheck', 'false');
-            
-            // Add placeholder
-            blank.setAttribute('placeholder', '...');
-            
-            // Add aria label
-            const index = blank.dataset.index;
-            blank.setAttribute('aria-label', `Answer for blank ${index}`);
+            blank.setAttribute('aria-label', `Answer for blank ${index + 1}`);
+            blank.setAttribute('data-index', index + 1);
 
-            // Add interaction handlers
             blank.addEventListener('focus', () => this.handleFocus(blank));
             blank.addEventListener('blur', () => this.handleBlur(blank));
-            blank.addEventListener('input', () => this.handleInput(blank));
-            
-            // Add keydown handler for Enter key
-            blank.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    this.focusNextBlank(blank);
-                }
-            });
+            blank.addEventListener('input', (e) => this.handleInput(e, blank));
+            blank.addEventListener('keydown', (e) => this.handleKeydown(e, blank));
         });
     }
 
     handleFocus(blank) {
         blank.classList.add('focused');
+        if (this.state.feedback.has(blank.dataset.index)) {
+            this.showTooltip(blank, this.state.feedback.get(blank.dataset.index));
+        }
     }
 
     handleBlur(blank) {
         blank.classList.remove('focused');
+        this.hideTooltip(blank);
     }
 
-    handleInput(blank) {
-        // Clear any previous feedback
-        blank.classList.remove('correct', 'incorrect');
+    handleInput(event, blank) {
+        const value = event.target.value.trim();
+        this.state.answers.set(blank.dataset.index, value);
         
-        // Add typing feedback
-        if (blank.value.length > 0) {
-            blank.classList.add('has-content');
-        } else {
-            blank.classList.remove('has-content');
+        blank.classList.toggle('has-content', value.length > 0);
+        this.dispatchProgressEvent();
+    }
+
+    handleKeydown(event, blank) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            this.focusNextBlank(blank);
         }
     }
 
@@ -72,42 +90,80 @@ export default class FillBlanksTask extends BaseTask {
         }
     }
 
+    showTooltip(blank, message) {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = message;
+        blank.parentNode.appendChild(tooltip);
+
+        // Position tooltip
+        const blankRect = blank.getBoundingClientRect();
+        tooltip.style.top = `${blankRect.top - tooltip.offsetHeight - 5}px`;
+        tooltip.style.left = `${blankRect.left + (blankRect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+    }
+
+    hideTooltip(blank) {
+        const tooltip = blank.parentNode.querySelector('.tooltip');
+        if (tooltip) tooltip.remove();
+    }
+
+    dispatchProgressEvent() {
+        const progress = this.calculateProgress();
+        document.dispatchEvent(new CustomEvent('taskProgress', {
+            detail: {
+                taskId: this.element.id,
+                progress
+            }
+        }));
+    }
+
+    calculateProgress() {
+        const answered = Array.from(this.state.answers.values()).filter(Boolean).length;
+        return answered / this.blanks.length;
+    }
+
     async check() {
         let correct = 0;
         let answered = 0;
 
-        for (const blank of this.blanks) {
+        this.blanks.forEach(blank => {
             const userAnswer = blank.value.trim().toLowerCase();
             const correctAnswer = blank.dataset.correct.toLowerCase();
-
+            
             if (userAnswer) {
                 answered++;
-                
-                // Check if answer is correct
                 const isCorrect = userAnswer === correctAnswer;
                 
-                // Remove previous feedback
+                // Update visual state
                 blank.classList.remove('correct', 'incorrect', 'has-content');
-                
-                // Add new feedback
                 blank.classList.add(isCorrect ? 'correct' : 'incorrect');
                 
-                if (isCorrect) {
-                    correct++;
-                } else {
-                    // Show correct answer tooltip
-                    blank.setAttribute('title', `Correct answer: ${correctAnswer}`);
+                // Update feedback
+                if (!isCorrect) {
+                    this.state.feedback.set(blank.dataset.index, `Correct answer: ${correctAnswer}`);
+                    if (blank.matches(':focus')) {
+                        this.showTooltip(blank, this.state.feedback.get(blank.dataset.index));
+                    }
                 }
+                
+                if (isCorrect) correct++;
             }
-        }
+        });
 
-        this.state.score = this.calculateScore(correct, this.blanks.length);
-        this.state.checked = true;
-        this.state.answered = answered;
+        // Update feedback region for screen readers
+        this.feedbackRegion.textContent = `${correct} out of ${this.blanks.length} answers correct`;
+
+        const score = this.calculateScore(correct, this.blanks.length);
+        this.state = {
+            ...this.state,
+            score,
+            checked: true,
+            answered
+        };
 
         return {
-            correct: this.state.score === 1,
-            score: this.state.score,
+            correct: score === 1,
+            score,
             details: {
                 total: this.blanks.length,
                 correct,
@@ -120,11 +176,28 @@ export default class FillBlanksTask extends BaseTask {
         this.blanks.forEach(blank => {
             blank.value = '';
             blank.classList.remove('correct', 'incorrect', 'has-content', 'focused');
-            blank.removeAttribute('title');
+            this.hideTooltip(blank);
         });
 
-        this.state.checked = false;
-        this.state.score = 0;
-        this.state.answered = 0;
+        this.state = {
+            ...this.state,
+            checked: false,
+            score: 0,
+            answered: 0,
+            answers: new Map(),
+            feedback: new Map()
+        };
+
+        this.feedbackRegion.textContent = '';
+        this.dispatchProgressEvent();
+    }
+
+    addErrorHandling() {
+        window.addEventListener('error', (event) => {
+            if (event.target === this.element || this.element.contains(event.target)) {
+                console.error('FillBlanks task error:', event.error);
+                this.feedbackRegion.textContent = 'An error occurred. Please try again.';
+            }
+        });
     }
 }
