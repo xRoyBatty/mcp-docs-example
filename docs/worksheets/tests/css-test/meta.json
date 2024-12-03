@@ -1,0 +1,16 @@
+{
+    "title": "CSS Inheritance Test",
+    "level": "Test",
+    "category": "Development",
+    "tags": ["test", "css", "development"],
+    "description": "Test case for CSS inheritance and variable application.",
+    "objectives": [
+        "Test CSS variable inheritance",
+        "Verify class chain functionality",
+        "Compare different class structures"
+    ],
+    "estimatedTime": "5 minutes",
+    "taskTypes": ["multiChoice"],
+    "skillsFocus": ["development"],
+    "prerequisites": ["None"]
+}

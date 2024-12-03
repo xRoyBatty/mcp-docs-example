@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Inheritance Test | ESL Worksheets</title>
+    <link rel="stylesheet" href="../../../assets/css/base.css">
+    <link rel="stylesheet" href="../../../assets/css/layout.css">
+    <link rel="stylesheet" href="../../../assets/css/components.css">
+    <link rel="stylesheet" href="../../../assets/css/tasks/base-task.css">
+    <link rel="stylesheet" href="../../../assets/css/tasks/multiChoice.css">
+</head>
+<body>
+    <main id="main-content" class="worksheet" role="main">
+        <!-- Test Case 1: Full Class Chain -->
+        <section class="task task-container multiple-choice" data-task-type="multiChoice">
+            <h2 class="task-title">Test 1: Full Class Chain</h2>
+            <div class="task-instructions">This task has all recommended classes.</div>
+            <div class="task-content">
+                <div class="task-item multiple-choice-item" data-index="1">
+                    <p class="question-text">Test question with complete class chain?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="1">
+                            <span class="option-text">Test option 1</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="2" data-correct="true">
+                            <span class="option-text">Test option 2</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Case 2: Current Implementation -->
+        <section class="task-container" data-task-type="multiChoice">
+            <h2 class="task-title">Test 2: Current Implementation</h2>
+            <div class="task-instructions">This task uses current class structure.</div>
+            <div class="task-content">
+                <div class="task-item" data-index="1">
+                    <p class="question-text">Test question with basic classes?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="1">
+                            <span class="option-text">Test option 1</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="2" data-correct="true">
+                            <span class="option-text">Test option 2</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Case 3: Minimal with Debug Info -->
+        <style>
+            .debug-info {
+                font-family: monospace;
+                background: #f8f9fa;
+                padding: 1rem;
+                margin: 1rem 0;
+                border: 1px solid #dee2e6;
+                white-space: pre-wrap;
+            }
+            #cssVarsTest span {
+                display: block;
+                margin: 0.25rem 0;
+            }
+            #cssVarsTest .var-name {
+                color: #0066cc;
+            }
+            #cssVarsTest .var-value {
+                color: #006600;
+                margin-left: 1rem;
+            }
+        </style>
+
+        <!-- Test Variables Output -->
+        <div id="cssVarsTest" class="debug-info">
+            <h3>CSS Variable Test</h3>
+        </div>
+
+        <div class="debug-info">
+            <h3>Computed Styles Test</h3>
+            <div id="computedStylesTest"></div>
+        </div>
+    </main>
+
+    <script>
+    window.addEventListener('DOMContentLoaded', () => {
+        // Test CSS Variables
+        const cssVarsTest = document.getElementById('cssVarsTest');
+        const computedStylesTest = document.getElementById('computedStylesTest');
+        const testElements = [
+            '.task.task-container.multiple-choice',
+            '.task-container',
+            '.task-item.multiple-choice-item',
+            '.task-item'
+        ];
+
+        // Get all CSS variables
+        const rootStyles = getComputedStyle(document.documentElement);
+        const vars = Array.from(rootStyles).filter(prop => prop.startsWith('--'));
+        vars.forEach(varName => {
+            const value = rootStyles.getPropertyValue(varName);
+            cssVarsTest.innerHTML += `<span><span class="var-name">${varName}:</span><span class="var-value">${value}</span></span>`;
+        });
+
+        // Test computed styles
+        testElements.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                const styles = getComputedStyle(element);
+                const important = ['background', 'border', 'padding', 'margin', 'color'];
+                computedStylesTest.innerHTML += `<h4>${selector}</h4>`;
+                important.forEach(prop => {
+                    computedStylesTest.innerHTML += `<span>${prop}: ${styles.getPropertyValue(prop)}</span><br>`;
+                });
+                computedStylesTest.innerHTML += '<hr>';
+            }
+        });
+    });
+    </script>
+</body>
+</html>
