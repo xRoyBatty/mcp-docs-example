@@ -1,0 +1,12 @@
+/* Filter component styles */
+.filter-group {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+    flex-wrap: wrap;
+}
+
+.filter-button {
+    composes: btn btn-outline;
+}

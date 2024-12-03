@@ -1,5 +1,6 @@
-/* Master file that imports all component styles */
+/* Master component imports */
+@import 'components/card.css';
+@import 'components/filter.css';
+@import 'components/search.css';
 @import 'components/header.css';
 @import 'components/footer.css';
-@import 'components/search.css';
-@import 'components/worksheetCard.css';
