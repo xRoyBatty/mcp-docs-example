@@ -1,22 +1,40 @@
 <!-- Multiple Choice Task Template -->
-<section class="task multi-choice" data-task-type="multiChoice">
-    <h2>Multiple Choice</h2>
-    
-    <p class="task-instructions">Choose the best answer for each question.</p>
-    
-    <div class="questions-container">
-        <div class="question" data-index="1">
-            <p class="question-text">Example question?</p>
-            <div class="options">
+<section class="task multiple-choice" data-task-type="multiChoice" aria-labelledby="{TASK_ID}-title">
+    <h2 id="{TASK_ID}-title" class="task-title">{TITLE}</h2>
+    <div class="task-instructions">{INSTRUCTIONS}</div>
+
+    <div class="questions-container" role="group" aria-label="Multiple choice questions">
+        <!-- Question Template (repeat for each question) -->
+        <div class="question" data-index="{INDEX}" role="group" aria-labelledby="{TASK_ID}-q{INDEX}">
+            <p id="{TASK_ID}-q{INDEX}" class="question-text">{QUESTION_TEXT}</p>
+            
+            <div class="options" role="radiogroup" aria-labelledby="{TASK_ID}-q{INDEX}">
+                <!-- Option Template (repeat for each option) -->
                 <label class="option">
-                    <input type="radio" name="q1" value="1">
-                    <span class="option-text">Example option A</span>
+                    <input type="radio" 
+                           name="{TASK_ID}-q{INDEX}" 
+                           value="{OPTION_VALUE}" 
+                           data-correct="{IS_CORRECT}" 
+                           aria-labelledby="{TASK_ID}-q{INDEX}-opt{OPTION_INDEX}">
+                    <span id="{TASK_ID}-q{INDEX}-opt{OPTION_INDEX}" class="option-text">
+                        {OPTION_TEXT}
+                    </span>
                 </label>
-                <label class="option">
-                    <input type="radio" name="q1" value="2" data-correct="true">
-                    <span class="option-text">Example option B</span>
-                </label>
+                <!-- End Option Template -->
             </div>
         </div>
+        <!-- End Question Template -->
     </div>
 </section>
+
+<!-- Template Variables:
+{TASK_ID} - Unique identifier for the task
+{TITLE} - Task title
+{INSTRUCTIONS} - Task instructions
+{INDEX} - Question number (1-based)
+{QUESTION_TEXT} - The question text
+{OPTION_VALUE} - Value for the option
+{IS_CORRECT} - "true" for correct option, omit for incorrect
+{OPTION_INDEX} - Letter index for the option (a, b, c, etc.)
+{OPTION_TEXT} - Text for the option
+-->
