@@ -1,48 +1,47 @@
 /* Multiple choice task styles */
+@import 'base-task.css';
 
 .multi-choice .questions-container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--spacing-lg);
 }
 
 /* Question styling */
 .multi-choice .question {
-    background: white;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    padding: 1.5rem;
+    composes: task-item;
+    animation: slideIn var(--transition-base);
 }
 
 .multi-choice .question-text {
     font-weight: 500;
-    margin-bottom: 1rem;
-    color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+    color: var(--task-text);
 }
 
 /* Options container */
 .multi-choice .options {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--spacing-sm);
 }
 
 /* Option styling */
 .multi-choice .option {
     display: flex;
     align-items: center;
-    padding: 0.75rem 1rem;
-    border: 2px solid var(--color-border);
-    border-radius: 6px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px solid var(--task-border-color);
+    border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--transition-base);
     position: relative;
-    background: white;
+    background: var(--task-background);
 }
 
 /* Radio input styling */
 .multi-choice input[type="radio"] {
-    margin-right: 1rem;
+    margin-right: var(--spacing-md);
     width: 1.25rem;
     height: 1.25rem;
     cursor: pointer;
@@ -51,29 +50,29 @@
 /* Option prefix */
 .multi-choice .option-prefix {
     font-weight: 500;
-    color: var(--color-text-light);
-    margin-right: 0.5rem;
+    color: var(--task-text-light);
+    margin-right: var(--spacing-sm);
 }
 
 /* Option states */
 .multi-choice .option:hover {
     border-color: var(--color-primary);
-    background-color: var(--color-background);
+    background-color: rgba(0, 123, 255, 0.05);
 }
 
 .multi-choice .option.selected {
     border-color: var(--color-primary);
-    background-color: rgba(46, 204, 113, 0.05);
+    background-color: rgba(0, 123, 255, 0.1);
 }
 
 .multi-choice .option.correct {
     border-color: var(--color-success);
-    background-color: rgba(46, 204, 113, 0.1);
+    background-color: rgba(40, 167, 69, 0.1);
 }
 
 .multi-choice .option.incorrect {
-    border-color: var(--color-error);
-    background-color: rgba(231, 76, 60, 0.1);
+    border-color: var(--color-danger);
+    background-color: rgba(220, 53, 69, 0.1);
 }
 
 .multi-choice .option.dimmed {
@@ -83,33 +82,66 @@
 /* Animation for state changes */
 .multi-choice .option {
     transform-origin: center left;
-    animation: optionAppear 0.3s ease;
+    animation: slideIn var(--transition-base);
 }
 
-@keyframes optionAppear {
-    from {
-        opacity: 0;
-        transform: translateX(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+/* Custom radio input styling */
+.multi-choice .radio-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.multi-choice .radio-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.multi-choice .radio-custom {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid var(--task-border-color);
+    border-radius: 50%;
+    margin-right: var(--spacing-md);
+    position: relative;
+    transition: all var(--transition-base);
+}
+
+.multi-choice .radio-input:checked + .radio-custom {
+    border-color: var(--color-primary);
+}
+
+.multi-choice .radio-input:checked + .radio-custom::after {
+    content: '';
+    position: absolute;
+    width: 0.75rem;
+    height: 0.75rem;
+    background: var(--color-primary);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
     .multi-choice .question {
-        padding: 1rem;
+        padding: var(--spacing-md);
     }
 
     .multi-choice .option {
-        padding: 0.75rem;
+        padding: var(--spacing-sm);
     }
 
-    .multi-choice input[type="radio"] {
+    .multi-choice .radio-custom {
         width: 1rem;
         height: 1rem;
-        margin-right: 0.75rem;
+        margin-right: var(--spacing-sm);
+    }
+
+    .multi-choice .radio-input:checked + .radio-custom::after {
+        width: 0.5rem;
+        height: 0.5rem;
     }
 }
